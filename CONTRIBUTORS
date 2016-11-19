@@ -1,9 +1,0 @@
-waveforms4j is developed by Knowm Inc. members and the open-source community.
-
-Please sign a CLA with your pull request.
-
-The following list of authors was automatically generated from the waveforms4j project's git repo with the command:
-
-    git log --format='%aN' | sort -u
-
-Tim Molter

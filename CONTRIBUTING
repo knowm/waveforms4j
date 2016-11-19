@@ -1,0 +1,9 @@
+waveforms4j is developed by Knowm Inc. members and the open-source community. Please develop on the `develop` branch.
+
+To get started, <a href="https://www.clahub.com/agreements/knowm/waveforms4j">sign the Contributor License Agreement</a>.
+
+The following list of authors was automatically generated from the waveforms4j project's git repo with the command:
+
+    git log --format='%aN' | sort -u
+
+Tim Molter
