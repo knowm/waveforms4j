@@ -97,3 +97,31 @@ Since we moved the jni lib into `src/main/resources` in the above step, the nati
     mvn license:check
     mvn license:format
     mvn license:remove
+    
+### Getting the Jar
+
+The Yank release artifacts are hosted on [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.knowm.waveforms4j%22).
+
+Or if you use Maven, add the following to your pom file:
+
+```xml
+<dependency>
+    <groupId>org.knowm</groupId>
+    <artifactId>waveforms4j</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
+For snapshots, add the following to your pom.xml file:
+```xml
+<repository>
+  <id>sonatype-oss-snapshot</id>
+  <snapshots/>
+  <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+</repository>
+
+<dependency>
+    <groupId>org.knowm</groupId>
+    <artifactId>waveforms4j</artifactId>
+    <version>0.0.2-SNAPHOT</version>
+</dependency>
+```
