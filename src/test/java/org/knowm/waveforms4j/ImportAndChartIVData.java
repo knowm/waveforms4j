@@ -1,18 +1,29 @@
 /**
- * Copyright 2015-2016 Knowm Inc. (http://knowm.org) and contributors.
- * Copyright 2011-2015 Xeiam LLC (http://xeiam.com) and contributors.
+ * Waveforms4j is distributed under the GNU General Public License version 3
+ * and is also available under alternative licenses negotiated directly
+ * with Knowm, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2016 Knowm Inc. www.knowm.org
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This package also includes various components that are not part of
+ * Waveforms4j itself:
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * * `NativeUtils`: Copyright 2012 Adam Heinrich, MIT License
+ * * `dwf.h`: Copyright 2013 Digilent Inc., no license defined
+ *
+ * Knowm, Inc. holds copyright
+ * and/or sufficient licenses to all components of the Waveforms4j
+ * package, and therefore can grant, at its sole discretion, the ability
+ * for companies, individuals, or organizations to create proprietary or
+ * open source (even if not GPL) modules which may be dynamically linked at
+ * runtime with the portions of Waveforms4j which fall under our
+ * copyright/license umbrella, or are distributed under more flexible
+ * licenses than GPL.
+ *
+ * The 'Knowm' name and logos are trademarks owned by Knowm, Inc.
+ *
+ * If you have any questions regarding our licensing policy, please
+ * contact us at `contact@knowm.org`.
  */
 package org.knowm.waveforms4j;
 
