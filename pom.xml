@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>org.knowm.xchart</groupId>
 			<artifactId>xchart</artifactId>
-			<version>3.2.2-SNAPSHOT</version>
+			<version>3.2.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
