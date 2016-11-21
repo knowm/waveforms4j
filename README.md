@@ -100,7 +100,7 @@ Since we moved the jni lib into `src/main/resources` in the above step, the nati
     
 ### Getting the Jar
 
-The Yank release artifacts are hosted on [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.knowm.waveforms4j%22).
+The waveforms4j release artifacts are hosted on [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.knowm.waveforms4j%22).
 
 Or if you use Maven, add the following to your pom file:
 
