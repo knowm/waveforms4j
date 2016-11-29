@@ -31,15 +31,15 @@ Download the Java SE Runtime Environment 8 from [Oracle's Website](http://www.or
 
 ## Install DWF Framework on Linux
 
-Download for the latest Linux SDK here: <https://reference.digilentinc.com/reference/software/adept> and run the installer.
+Get .deb files from here: <https://reference.digilentinc.com/reference/software/waveforms/waveforms-3>
 
-	cd ~/Downloads/digilent.adept.sdk_2.4.2
-	./install.sh
-
-Download for the latest Linux Runtime here: <https://reference.digilentinc.com/reference/software/adept> and run the installer.
-
-	cd ~/Downloads/digilent.adept.runtime_2.16.5-x86_64
-	./install.sh
+    sudo mv ~/Downloads/digilent.waveforms_3.3.7_amd64.deb /var/cache/apt/archives
+    cd /var/cache/apt/archives
+    sudo dpkg -i digilent.waveforms_3.3.7_amd64.deb
+    
+    sudo mv ~/Downloads/digilent.adept.runtime_2.16.5-amd64.deb /var/cache/apt/archives
+    cd /var/cache/apt/archives
+    sudo dpkg -i digilent.adept.runtime_2.16.5-amd64.deb
 
 # Developing on Mac OSX
 
@@ -49,15 +49,15 @@ In single class called `DWF` is where our Java app code interacts with the SDK. 
 
     static {
       try {
-        NativeUtils.loadLibraryFromJar("/libdwf.jnilib");
+        NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
       } catch (IOException e) {
         e.printStackTrace(); // This is probably not the best way to handle exception :-)
       }
     }
     
-The `libdwf.jnilib` file is something we need to create ourselves. This file is the JNI bridge between our Java code and their binary SDK. Note that on Linux and Windows, we need to build additional binaries to load.
+The `waveforms4j.dylib` file is something we need to create ourselves. This file is the JNI bridge between our Java code and their binary SDK. Note that on Linux and Windows, we need to build additional binaries to load.
 
-The following steps outline how to create the `libdwf.jnilib` file and put it in the `resources` folder, which will get bundled with the deployable jar we build.
+The following steps outline how to create the `waveforms4j.dylib` file and put it in the `resources` folder, which will get bundled with the deployable jar we build.
 
 ## Move to project directory
     
@@ -84,8 +84,8 @@ You need to find where the Java JNI Headers are located first and use it for the
     sudo find / -name "jni.h"
     find / -name jni_md.h 2> /dev/null
 
-    gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o libdwf.jnilib
-    mv ./libdwf.jnilib ./src/main/resources
+    gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o waveforms4j.dylib
+    mv ./waveforms4j.dylib ./src/main/resources
 
 #### Linux
 
@@ -94,16 +94,9 @@ You need to find where the Java JNI Headers are located first and use it for the
     sudo find / -name "jni.h"
     find / -name jni_md.h 2> /dev/null
 
-
 	cd ~/workspace/waveforms4j
     gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/lib -ldwf
-    #gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/include/digilent -ladept
     mv ./waveforms4j.so ./src/main/resources
-    
-    
-    /usr/include/digilent/adept
-    
-I think for Windows and Linux, we need to create a `.dll` and `.so` file respectively using a similar `gcc` command as above.
     
 ## Some Resources
 

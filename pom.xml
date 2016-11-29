@@ -176,6 +176,7 @@
 					</includes>
 					<excludes>
 						<exclude>**/cz/adamh/utils/**</exclude>
+				        <exclude>**/org/multibit/platform/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

@@ -10,6 +10,7 @@
  *
  * * `NativeUtils`: Copyright 2012 Adam Heinrich, MIT License
  * * `dwf.h`: Copyright 2013 Digilent Inc., no license defined
+ * * `Multibit`: Copyright 2011 multibit.org, MIT License
  *
  * Knowm, Inc. holds copyright
  * and/or sufficient licenses to all components of the Waveforms4j
@@ -39,11 +40,12 @@ public class DWF {
 
   static {
     try {
-    	if(OSUtils.isMac()){
-    		NativeUtils.loadLibraryFromJar("/libdwf.jnilib");
-    	}else if(OSUtils.isLinux()){
-    	    NativeUtils.loadLibraryFromJar("/waveforms4j.so");
-    	}
+      if (OSUtils.isMac()) {
+        NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
+      }
+      else if (OSUtils.isLinux()) {
+        NativeUtils.loadLibraryFromJar("/waveforms4j.so");
+      }
     } catch (IOException e) {
       e.printStackTrace(); // This is probably not the best way to handle exception :-)
     }

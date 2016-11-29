@@ -10,6 +10,7 @@
  *
  * * `NativeUtils`: Copyright 2012 Adam Heinrich, MIT License
  * * `dwf.h`: Copyright 2013 Digilent Inc., no license defined
+ * * `Multibit`: Copyright 2011 multibit.org, MIT License
  *
  * Knowm, Inc. holds copyright
  * and/or sufficient licenses to all components of the Waveforms4j
