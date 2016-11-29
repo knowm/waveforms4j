@@ -50,7 +50,7 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDigitalIOReset
 JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDigitalIOStatus
   (JNIEnv * env, jobject obj){
   
-    FDwfDigitalIOStatus(hdwf);
+    return FDwfDigitalIOStatus(hdwf);
   }  
   
 JNIEXPORT jint JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDigitalIOInputStatus
@@ -178,7 +178,7 @@ JNIEXPORT jint JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInBufferSizeMax
 JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInBufferSizeSet
   (JNIEnv * env, jobject obj, jint size){
   
-    FDwfAnalogInBufferSizeSet(hdwf, size);  
+    return FDwfAnalogInBufferSizeSet(hdwf, size);  
   }  
 
 JNIEXPORT jbyte JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInStatus

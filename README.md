@@ -29,6 +29,18 @@ Download the Java SE Runtime Environment 8 from [Oracle's Website](http://www.or
     brew update
     brew install homebrew/versions/gcc6
 
+## Install DWF Framework on Linux
+
+Download for the latest Linux SDK here: <https://reference.digilentinc.com/reference/software/adept> and run the installer.
+
+	cd ~/Downloads/digilent.adept.sdk_2.4.2
+	./install.sh
+
+Download for the latest Linux Runtime here: <https://reference.digilentinc.com/reference/software/adept> and run the installer.
+
+	cd ~/Downloads/digilent.adept.runtime_2.16.5-x86_64
+	./install.sh
+
 # Developing on Mac OSX
 
 The SDK for the Digilent Analog Discovery 2 comes in the form of a compiled C++ framework. On Mac OSX, this comes in the form of a `*.framework` file, which is described above. On a Windows system, the SDK is a `.DLL`. In order to interact with the SDK with our Java app, we use Java JNI.
@@ -65,6 +77,8 @@ Note: you need to take those methods created in the header file and implement th
 
 ### Compile the C++ and header files into a native library and move to `resources` folder.
 
+#### MacOS
+
 You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments:
 
     sudo find / -name "jni.h"
@@ -72,6 +86,22 @@ You need to find where the Java JNI Headers are located first and use it for the
 
     gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o libdwf.jnilib
     mv ./libdwf.jnilib ./src/main/resources
+
+#### Linux
+
+You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments:
+
+    sudo find / -name "jni.h"
+    find / -name jni_md.h 2> /dev/null
+
+
+	cd ~/workspace/waveforms4j
+    gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/lib -ldwf
+    #gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/include/digilent -ladept
+    mv ./waveforms4j.so ./src/main/resources
+    
+    
+    /usr/include/digilent/adept
     
 I think for Windows and Linux, we need to create a `.dll` and `.so` file respectively using a similar `gcc` command as above.
     

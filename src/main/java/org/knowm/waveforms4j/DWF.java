@@ -29,6 +29,7 @@ package org.knowm.waveforms4j;
 
 import java.io.IOException;
 
+import org.multibit.platform.builder.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,11 @@ public class DWF {
 
   static {
     try {
-      NativeUtils.loadLibraryFromJar("/libdwf.jnilib");
+    	if(OSUtils.isMac()){
+    		NativeUtils.loadLibraryFromJar("/libdwf.jnilib");
+    	}else if(OSUtils.isLinux()){
+    	    NativeUtils.loadLibraryFromJar("/waveforms4j.so");
+    	}
     } catch (IOException e) {
       e.printStackTrace(); // This is probably not the best way to handle exception :-)
     }
