@@ -111,9 +111,11 @@ You need to find where the Java JNI Headers are located first and use it for the
  
 ## Windows
 
-You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments. This is usualy somewhere sucxh as: C:\Program Files\Java\jdk1.8.0_112.
+You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments. This is usually somewhere such as: C:\Program Files\Java\jdk1.8.0_112.
 
-You need to install a GCC compiler for Windows usch as [Mingw-64](http://mingw-w64.org/doku.php).
+You need to install a GCC compiler for Windows such as [Mingw-64](http://mingw-w64.org/doku.php).
+
+**This is a work in progress and below are just some commands that I've been trying to get this all to work.**
 
 	cd C:\Users\Tim\Documents\GitHub\waveforms4j
     gcc -Wl,--add-stdcall-alias -shared -m64  -c ./c/org_knowm_waveforms4j_DWF.cpp -o waveforms4j.dll -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -ldwf
