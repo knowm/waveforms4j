@@ -44,7 +44,15 @@ public class DWF {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
       }
       else if (OSUtils.isLinux()) {
-        NativeUtils.loadLibraryFromJar("/waveforms4j.so");
+          NativeUtils.loadLibraryFromJar("/waveforms4j.so");
+      }      
+      else if (OSUtils.isWindows()) {
+//    	  System.loadLibrary("dwf");
+//          NativeUtils.loadLibraryFromJar("/libstdc++-6.dll");
+//    	  System.load("C://Windows/System32/dwf.dll");
+//    	  System.load("C://Windows/System32/waveforms4j.dll");
+    	  System.loadLibrary("waveforms4j");
+//          NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
       }
     } catch (IOException e) {
       e.printStackTrace(); // This is probably not the best way to handle exception :-)

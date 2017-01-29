@@ -1,33 +1,24 @@
 # Introduction
 
-This library is a Java implementation of the Digilent Waveforms AD2 SDK. A C++ and Python SDK is provided by Digilent, but no Java SDK existed. The entire API is not yet implemented and this project is a work in progress. Most development has been done on a Mac, and at this time hasn't been tested on Linux or Windows. Porting to all systems should be trivial though.  
+This library is a Java implementation of the Digilent Waveforms AD2 SDK. A C++ and Python SDK is provided by Digilent, but no Java SDK existed. The entire API is not yet implemented and this project is a work in progress.
 
-This library should work for your Java-based Waveforms app by simply adding the jar to your app's classpath. However, if you need to add more API features that are not yet implemented or need to make it work for Windows or Linux, then the rest of this readme file explains how to do that.
+|OS | Progress |
+|---|---|
+|MacOS|Working|
+|Linux|Working|
+|Windows|Not Yet Working|
+
+This library should work for your Java-based Waveforms app by simply adding the jar to your app's classpath. However, if you need to add more API features that are not yet implemented, then the rest of this readme file explains how to do that.
 
 # Pre-requisites for Development
 
-## Install DWF Framework on Mac OSX
+Obviously Java is required on your platform, and instructions for that are not included here. This library was compiled with Java 8.
 
-Move the `dwf.framework` to `/Library/Frameworks`, as indicated during the install of Waveforms from the DMG:
+## Install DWF Framework on MacOS
+
+Download Waveforms 2015 from [Digilent](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start?redirect=1#newest) and open the DMG file, carrying on as usual. Move the `dwf.framework` to `/Library/Frameworks`, as indicated during the install of Waveforms from the DMG:
 
 ![](AD2_SDK/_img/Framework.png)
-
-## Install Java 8 Runtime Environment
-
-### Option #1: Download and Install From Oracle
-
-Download the Java SE Runtime Environment 8 from [Oracle's Website](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) and run the installer.
-
-### Option #2: Install via Homebrew on Mac OSX
- 
-    brew update
-    brew cask install java
-
-## Prepare C++ for Development on Mac
-
-    xcode-select --install
-    brew update
-    brew install homebrew/versions/gcc6
 
 ## Install DWF Framework on Linux
 
@@ -41,43 +32,56 @@ Get .deb files from here: <https://reference.digilentinc.com/reference/software/
     cd /var/cache/apt/archives
     sudo dpkg -i digilent.adept.runtime_2.16.5-amd64.deb
 
-# Developing on Mac OSX
+## Install DWF Framework on Windows 10
+
+Download Waveforms 2015 from [Digilent](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start?redirect=1#newest) and launch it to run the installation wizard. This process will install the required frameworks.
+
+## Accessing the AD2 SDK from Java
 
 The SDK for the Digilent Analog Discovery 2 comes in the form of a compiled C++ framework. On Mac OSX, this comes in the form of a `*.framework` file, which is described above. On a Windows system, the SDK is a `.DLL`. In order to interact with the SDK with our Java app, we use Java JNI.
 
 In single class called `DWF` is where our Java app code interacts with the SDK. DWF stands for `Digilent Waveform`. Note that in our `DWF` class, a static block is used to load the JNI library. We need to create this library manually and it's not provided By Digilent.
 
-    static {
-      try {
+  static {
+    try {
+      if (OSUtils.isMac()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
-      } catch (IOException e) {
-        e.printStackTrace(); // This is probably not the best way to handle exception :-)
       }
+      else if (OSUtils.isLinux()) {
+          NativeUtils.loadLibraryFromJar("/waveforms4j.so");
+      }      
+      else if (OSUtils.isWindows()) {
+          NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
+      }
+    } catch (IOException e) {
+      e.printStackTrace(); // This is probably not the best way to handle exception :-)
     }
+  }
     
-The `waveforms4j.dylib` file is something we need to create ourselves. This file is the JNI bridge between our Java code and their binary SDK. Note that on Linux and Windows, we need to build additional binaries to load.
+The `waveforms4j.dylib`, `waveforms4j.so` and `waveforms4j.dll` file is something we need to create ourselves. This file is the JNI bridge between our Java code and Digilent's binary SDK.
 
-The following steps outline how to create the `waveforms4j.dylib` file and put it in the `resources` folder, which will get bundled with the deployable jar we build.
+## Compile Java Code and Generate Header File
 
-## Move to project directory
+Move to project directory
     
     cd ~/path/to/waveforms4j
 
-## Manually Compile All Java Classes (skip this if using Eclipse because Eclipse builds automatically on save)
+Manually Compile All Java Classes (skip this if using Eclipse because Eclipse builds automatically on save)
 
     javac src/main/java/org/knowm/waveforms4j/*.java
 
-## DWF Native Library
-
-### Take the `native` methods we've defined in `DWF.java` and create a header file.
+Take the `native` methods we've defined in `DWF.java` and create a header file.
 
     javah -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
+    "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
     
-Note: you need to take those methods created in the header file and implement them in the C++ file
+Note: You need to take those methods created in the header file and implement them in the C++ file.
 
-### Compile the C++ and header files into a native library and move to `resources` folder.
+## Building the JNI Library
 
-#### MacOS
+The following steps outline how to create the JNI library file and put it in the `resources` folder, which will get bundled with the deployable jar we build later with Maven. The final step is platform dependent, but the first steps are the same.
+
+## MacOS
 
 You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments:
 
@@ -87,7 +91,7 @@ You need to find where the Java JNI Headers are located first and use it for the
     gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o waveforms4j.dylib
     mv ./waveforms4j.dylib ./src/main/resources
 
-#### Linux
+## Linux
 
 You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments:
 
@@ -97,7 +101,45 @@ You need to find where the Java JNI Headers are located first and use it for the
 	cd ~/workspace/waveforms4j
     gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/lib -ldwf
     mv ./waveforms4j.so ./src/main/resources
+
+
+
+
+
+
+
+ 
+## Windows
+
+You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments. This is usualy somewhere sucxh as: C:\Program Files\Java\jdk1.8.0_112.
+
+You need to install a GCC compiler for Windows usch as [Mingw-64](http://mingw-w64.org/doku.php).
+
+	cd C:\Users\Tim\Documents\GitHub\waveforms4j
+    gcc -Wl,--add-stdcall-alias -shared -m64  -c ./c/org_knowm_waveforms4j_DWF.cpp -o waveforms4j.dll -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -ldwf
+    gcc -Wl,--add-stdcall-alias -shared -m64  -c ./c/org_knowm_waveforms4j_DWF.cpp -o waveforms4j.dll -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -L"C:\Windows\System32\dwf.dll" -ldwf
+    gcc -Wl,--kill-at -shared -m64 -D_JNI_IMPLEMENTATION_ -c ./c/org_knowm_waveforms4j_DWF.cpp -o waveforms4j.dll -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64\dwf.lib" -llibdwf
+ 	gcc -m64 -Wl,--add-stdcall-alias -shared -o waveforms4j.dll waveforms4j.o
+ 
+ 
+ 
+    gcc -Wl,--add-stdcall-alias -shared -o waveforms4j.dll -c ./c/org_knowm_waveforms4j_DWF.cpp -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -L"C:\Windows\System32\dwf.dll" -ldwf
+    gcc -Wl,--add-stdcall-alias -shared -o waveforms4j.dll -c ./c/org_knowm_waveforms4j_DWF.cpp -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64\dwf.lib" -llibdwf.lib
     
+
+	g++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -Wl,--add-stdcall-alias,--kill-at -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Windows\System32" -ldwf
+    
+    move ./waveforms4j.dll ./src/main/resources
+
+## Test
+
+A simple test to see if the JNI library works is to run `AnalogOutSine.java`. If you don't see any exception thrown, that means it's probably working.
+
+
+
+
+
+
 ## Some Resources
 
 1. [Adept SDK Docs](https://reference.digilentinc.com/reference/software/adept/start?redirect=1id=digilent_adept_2#software_downloads)
@@ -106,16 +148,16 @@ You need to find where the Java JNI Headers are located first and use it for the
 1. [Digilent's DWF library wrapper for python](https://github.com/amuramatsu/dwf)
 1. [Waveforms3 Manual](https://reference.digilentinc.com/waveforms3/refmanual)
 
-## Building
+## Building the Jar
 
-#### general
+### general
 
     mvn clean package  
     mvn javadoc:javadoc  
     
-Since we moved the jni lib into `src/main/resources` in the above step, the native lib is bundled in the jar.
+Since we moved the JNI libs into `src/main/resources` in the above step, they are bundled in the jar.
 
-#### maven-license-plugin
+### maven-license-plugin
 
     mvn license:check
     mvn license:format

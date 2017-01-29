@@ -39,7 +39,6 @@ public class AnalogOutSine {
     AnalogOutSine app = new AnalogOutSine();
 
     app.go();
-
   }
 
   private void go() throws InterruptedException {

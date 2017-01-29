@@ -32,7 +32,7 @@ import java.io.OutputStream;
 
 /**
  * A simple library class which helps with loading dynamic libraries stored in the
- * JAR archive. These libraries usualy contain implementation of some methods in
+ * JAR archive. These libraries usually contain implementation of some methods in
  * native code (using JNI - Java Native Interface).
  * 
  * @see http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar
