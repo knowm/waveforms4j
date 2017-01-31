@@ -33,24 +33,6 @@
 
 #pragma once
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#ifdef WIN32
-#include "dwf.h"
-#else
-#include "dwf.h"
-#endif
-
-#ifdef WIN32
-    #include <windows.h>
-    #define Wait(ts) Sleep((int)(1000*ts))
-#else
-    #include <unistd.h>
-    #include <sys/time.h>
-    #define Wait(ts) usleep((int)(1000000*ts))
-#endif
-
 #ifndef DWFINC 
 #define DWFINC TRUE
 
@@ -69,6 +51,17 @@
         #endif
     #endif
 #endif
+
+#ifdef WIN32
+    #include <windows.h>
+    #define Wait(ts) Sleep((int)(1000*ts))
+#else
+    #include <unistd.h>
+    #include <sys/time.h>
+    #define Wait(ts) usleep((int)(1000000*ts))
+#endif
+
+
 
 #ifndef BOOL
 typedef int BOOL;
@@ -114,12 +107,12 @@ const TRIGSRC trigsrcDigitalIn          = 5;
 const TRIGSRC trigsrcDigitalOut         = 6;
 const TRIGSRC trigsrcAnalogOut1         = 7;
 const TRIGSRC trigsrcAnalogOut2         = 8;
-const TRIGSRC trigsrcAnalogOut3         = 9; // No
-const TRIGSRC trigsrcAnalogOut4         = 10; // No
+const TRIGSRC trigsrcAnalogOut3         = 9;
+const TRIGSRC trigsrcAnalogOut4         = 10;
 const TRIGSRC trigsrcExternal1          = 11;
 const TRIGSRC trigsrcExternal2          = 12;
-const TRIGSRC trigsrcExternal3          = 13; // No
-const TRIGSRC trigsrcExternal4          = 14; // No
+const TRIGSRC trigsrcExternal3          = 13;
+const TRIGSRC trigsrcExternal4          = 14;
 
 // instrument states:
 typedef BYTE DwfState;
@@ -297,7 +290,6 @@ DWFAPI BOOL FDwfAnalogInStatusAutoTriggered(HDWF hdwf, BOOL *pfAuto);
 DWFAPI BOOL FDwfAnalogInStatusData(HDWF hdwf, int idxChannel, double *rgdVoltData, int cdData);
 DWFAPI BOOL FDwfAnalogInStatusData2(HDWF hdwf, int idxChannel, double *rgdVoltData, int idxData, int cdData);
 DWFAPI BOOL FDwfAnalogInStatusNoise(HDWF hdwf, int idxChannel, double *rgdMin, double *rgdMax, int cdData);
-DWFAPI BOOL FDwfAnalogInStatusNoise2(HDWF hdwf, int idxChannel, double *rgdMin, double *rgdMax, int idxData, int cdData);
 DWFAPI BOOL FDwfAnalogInStatusSample(HDWF hdwf, int idxChannel, double *pdVoltSample);
 
 DWFAPI BOOL FDwfAnalogInStatusRecord(HDWF hdwf, int *pcdDataAvailable, int *pcdDataLost, int *pcdDataCorrupt);

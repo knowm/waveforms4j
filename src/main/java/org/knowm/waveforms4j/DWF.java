@@ -29,6 +29,7 @@
 package org.knowm.waveforms4j;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.multibit.platform.builder.OSUtils;
 import org.slf4j.Logger;
@@ -44,7 +45,28 @@ public class DWF {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
       }
       else if (OSUtils.isLinux()) {
-        NativeUtils.loadLibraryFromJar("/waveforms4j.so");
+          NativeUtils.loadLibraryFromJar("/waveforms4j.so");
+      }      
+      else if (OSUtils.isWindows()) {
+    	  
+    	  String javaLibPath = System.getProperty("java.library.path");
+          Map<String, String> envVars = System.getenv();
+          System.out.println(envVars.get("Path"));
+          System.out.println(javaLibPath);
+          for (String var : envVars.keySet()) {
+              System.err.println("examining " + var);
+              if (envVars.get(var).equals(javaLibPath)) {
+                  System.out.println(var);
+              }
+          }
+
+//    	  System.loadLibrary("dwf");
+//          NativeUtils.loadLibraryFromJar("/libstdc++-6.dll");
+//    	  System.load("C://Windows/System32/dwf.dll");
+//    	  System.load("C://Windows/System32/waveforms4j.dll");
+    	  System.loadLibrary("/dwf");
+    	  System.loadLibrary("/waveforms4j");
+//          NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
       }
     } catch (IOException e) {
       e.printStackTrace(); // This is probably not the best way to handle exception :-)

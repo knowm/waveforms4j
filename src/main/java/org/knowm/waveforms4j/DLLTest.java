@@ -26,17 +26,15 @@
  * If you have any questions regarding our licensing policy, please
  * contact us at `contact@knowm.org`.
  */
-package org.knowm.waveforms4j.ad2;
+package org.knowm.waveforms4j;
 
-import org.knowm.waveforms4j.DWF;
-
-public class AnalogOutSine {
+public class DLLTest {
 
   final DWF dwf = new DWF();
 
   public static void main(String[] args) throws InterruptedException {
 
-    AnalogOutSine app = new AnalogOutSine();
+    DLLTest app = new DLLTest();
 
     app.go();
   }
