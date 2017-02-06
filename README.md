@@ -102,45 +102,22 @@ You need to find where the Java JNI Headers are located first and use it for the
     gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/lib -ldwf
     mv ./waveforms4j.so ./src/main/resources
 
-
-
-
-
-
-
  
 ## Windows
 
 You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments. This is usually somewhere such as: C:\Program Files\Java\jdk1.8.0_112.
 
-You need to install a GCC compiler for Windows such as [Mingw-64](http://mingw-w64.org/doku.php).
-
-**This is a work in progress and below are just some commands that I've been trying to get this all to work.**
+You need to install a GCC compiler for Windows such as [Mingw-64](https://sourceforge.net/projects/mingw-w64/).
 
 	cd C:\Users\Tim\Documents\GitHub\waveforms4j
-    gcc -Wl,--add-stdcall-alias -shared -m64  -c ./c/org_knowm_waveforms4j_DWF.cpp -o waveforms4j.dll -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -ldwf
-    gcc -Wl,--add-stdcall-alias -shared -m64  -c ./c/org_knowm_waveforms4j_DWF.cpp -o waveforms4j.dll -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -L"C:\Windows\System32\dwf.dll" -ldwf
-    gcc -Wl,--kill-at -shared -m64 -D_JNI_IMPLEMENTATION_ -c ./c/org_knowm_waveforms4j_DWF.cpp -o waveforms4j.dll -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64\dwf.lib" -llibdwf
- 	gcc -m64 -Wl,--add-stdcall-alias -shared -o waveforms4j.dll waveforms4j.o
- 
- 
- 
-    gcc -Wl,--add-stdcall-alias -shared -o waveforms4j.dll -c ./c/org_knowm_waveforms4j_DWF.cpp -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -L"C:\Windows\System32\dwf.dll" -ldwf
-    gcc -Wl,--add-stdcall-alias -shared -o waveforms4j.dll -c ./c/org_knowm_waveforms4j_DWF.cpp -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64\dwf.lib" -llibdwf.lib
-    
-
-	g++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -Wl,--add-stdcall-alias,--kill-at -I"C:\Program Files\Java\jdk1.8.0_112\include" -I"C:\Program Files\Java\jdk1.8.0_112\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Windows\System32" -ldwf
-    
+	g++ -static -static-libgcc -static-libstdc++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -I"C:\Program Files\Java\jdk1.8.0_121\include" -I"C:\Program Files\Java\jdk1.8.0_121\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Program Files\Digilent\WaveFormsSDK\lib\x64" -ldwf
     move ./waveforms4j.dll ./src/main/resources
+
+See `Dev4Windows.md` for more details in setting up a Windows10 Dev environment.
 
 ## Test
 
 A simple test to see if the JNI library works is to run `AnalogOutSine.java`. If you don't see any exception thrown, that means it's probably working.
-
-
-
-
-
 
 ## Some Resources
 
@@ -205,7 +182,7 @@ For snapshots, add the following to your pom.xml file:
 	java -cp C:\Users\Tim\Documents\GitHub\waveforms4j\target AnalogOutSine
 	
 cd C:\Users\Tim\Documents\GitHub\waveforms4j
-"C:\Program Files\Java\jdk1.8.0_112\bin\javac.exe" -d C:\Users\Tim\Documents\GitHub\waveforms4j\out -sourcepath C:\Users\Tim\Documents\GitHub\waveforms4j\src\main\java -cp "C:\Users\Tim\.m2\repository\org\slf4j\slf4j-api\1.7.21\slf4j-api-1.7.21.jar" C:\Users\Tim\Documents\GitHub\waveforms4j\src\main\java\org\knowm\waveforms4j\DLLTest.java
+"C:\Program Files\Java\jdk1.8.0_121\bin\javac.exe" -d C:\Users\Tim\Documents\GitHub\waveforms4j\out -sourcepath C:\Users\Tim\Documents\GitHub\waveforms4j\src\main\java -cp "C:\Users\Tim\.m2\repository\org\slf4j\slf4j-api\1.7.21\slf4j-api-1.7.21.jar" C:\Users\Tim\Documents\GitHub\waveforms4j\src\main\java\org\knowm\waveforms4j\DLLTest.java
 
 cd out
 
