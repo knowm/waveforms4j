@@ -6,7 +6,7 @@ This library is a Java implementation of the Digilent Waveforms AD2 SDK. A C++ a
 |---|---|
 |MacOS|Working|
 |Linux|Working|
-|Windows|Not Yet Working|
+|Windows 10|Working|
 
 This library should work for your Java-based Waveforms app by simply adding the jar to your app's classpath. However, if you need to add more API features that are not yet implemented, then the rest of this readme file explains how to do that.
 
@@ -152,7 +152,7 @@ Or if you use Maven, add the following to your pom file:
 <dependency>
     <groupId>org.knowm</groupId>
     <artifactId>waveforms4j</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 </dependency>
 ```
 For snapshots, add the following to your pom.xml file:
@@ -166,7 +166,7 @@ For snapshots, add the following to your pom.xml file:
 <dependency>
     <groupId>org.knowm</groupId>
     <artifactId>waveforms4j</artifactId>
-    <version>0.0.4-SNAPHOT</version>
+    <version>0.0.5-SNAPHOT</version>
 </dependency>
 ```
 
