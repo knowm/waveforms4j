@@ -29,13 +29,11 @@
 package org.knowm.waveforms4j;
 
 import java.io.IOException;
-import java.util.Map;
 
+import cz.adamh.utils.NativeUtils;
 import org.multibit.platform.builder.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import cz.adamh.utils.NativeUtils;
 
 public class DWF {
 
@@ -302,8 +300,8 @@ public class DWF {
 
   public boolean stopWave(int idxChannel) {
 
-    FDwfAnalogOutNodeOffsetSet(idxChannel, 0);
-    return FDwfAnalogInConfigure(false, false);
+    FDwfAnalogOutNodeOffsetSet(idxChannel, 0); // shouldn't need this in theory, but DC offset is always lingering (https://forum.digilentinc.com/topic/3465-waveforms-sdk-correctly-start-and-stop-analog-out/)
+    return FDwfAnalogOutConfigure(idxChannel, false);
   }
 
   public native boolean FDwfAnalogOutRepeatSet(int idxChannel, int repeat);
