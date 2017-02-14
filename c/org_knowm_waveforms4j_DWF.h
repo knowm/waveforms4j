@@ -35,6 +35,22 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDeviceCloseAll
 
 /*
  * Class:     org_knowm_waveforms4j_DWF
+ * Method:    FDwfGetLastErrorMsg
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_knowm_waveforms4j_DWF_FDwfGetLastErrorMsg
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_knowm_waveforms4j_DWF
+ * Method:    FDwfDeviceAutoConfigureSet
+ * Signature: (Z)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDeviceAutoConfigureSet
+  (JNIEnv *, jobject, jboolean);
+
+/*
+ * Class:     org_knowm_waveforms4j_DWF
  * Method:    FDwfDigitalIOOutputEnableSet
  * Signature: (I)Z
  */
@@ -71,6 +87,14 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDigitalIOStatus
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDigitalIOInputStatus
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_knowm_waveforms4j_DWF
+ * Method:    FDwfDigitalIOConfigure
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDigitalIOConfigure
   (JNIEnv *, jobject);
 
 /*
@@ -323,6 +347,22 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutConfigure
 
 /*
  * Class:     org_knowm_waveforms4j_DWF
+ * Method:    FDwfAnalogOutNodeDataInfo
+ * Signature: (I)[I
+ */
+JNIEXPORT jintArray JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutNodeDataInfo
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     org_knowm_waveforms4j_DWF
+ * Method:    FDwfAnalogOutNodeDataSet
+ * Signature: (I[DI)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutNodeDataSet
+  (JNIEnv *, jobject, jint, jdoubleArray, jint);
+
+/*
+ * Class:     org_knowm_waveforms4j_DWF
  * Method:    FDwfAnalogOutRepeatSet
  * Signature: (II)Z
  */
@@ -360,6 +400,14 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogIOChannelNod
  */
 JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogIOEnableSet
   (JNIEnv *, jobject, jboolean);
+
+/*
+ * Class:     org_knowm_waveforms4j_DWF
+ * Method:    FDwfAnalogIOConfigure
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogIOConfigure
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

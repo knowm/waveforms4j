@@ -49,12 +49,12 @@ In single class called `DWF` is where our Java app code interacts with the SDK. 
       }
       else if (OSUtils.isLinux()) {
           NativeUtils.loadLibraryFromJar("/waveforms4j.so");
-      }      
+      }
       else if (OSUtils.isWindows()) {
           NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
       }
     } catch (IOException e) {
-      e.printStackTrace(); // This is probably not the best way to handle exception :-)
+      e.printStackTrace();
     }
   }
     
@@ -66,15 +66,20 @@ Move to project directory
     
     cd ~/path/to/waveforms4j
 
-Manually Compile All Java Classes (skip this if using Eclipse because Eclipse builds automatically on save)
+Manually Compile All Java Classes (skip this if using Eclipse or IntelliJ)
 
     javac src/main/java/org/knowm/waveforms4j/*.java
 
 Take the `native` methods we've defined in `DWF.java` and create a header file.
 
-    javah -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
-    "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
-    
+    // javah -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
+    javah -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
+
+### Windows
+
+    // "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
+    "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
+
 Note: You need to take those methods created in the header file and implement them in the C++ file.
 
 ## Building the JNI Library
@@ -88,7 +93,7 @@ You need to find where the Java JNI Headers are located first and use it for the
     sudo find / -name "jni.h"
     find / -name jni_md.h 2> /dev/null
 
-    gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o waveforms4j.dylib
+    gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o waveforms4j.dylib
     mv ./waveforms4j.dylib ./src/main/resources
 
 ## Linux

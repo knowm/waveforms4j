@@ -15,24 +15,37 @@ HDWF hdwf;
 JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDeviceOpen
   (JNIEnv * env, jobject obj){
   
-    char szError[512] = {0};
-    
+
     //printf("Open automatically the first available device\n");
     if(!FDwfDeviceOpen(-1, &hdwf)) {
+        char szError[512] = {0};
         FDwfGetLastErrorMsg(szError);
-        printf("Device open failed\n\t%s", szError);
+        printf("Device open failed: \n\t%s", szError);
         return 0;
     }
     return 1;
   }
   
-  JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDeviceCloseAll
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDeviceCloseAll
   (JNIEnv * env, jobject obj){
   
     return FDwfDeviceCloseAll();
   }
 
+JNIEXPORT jstring JNICALL Java_org_knowm_waveforms4j_DWF_FDwfGetLastErrorMsg
+  (JNIEnv * env, jobject obj){
 
+    char szError[512] = {0};
+    FDwfGetLastErrorMsg(szError);
+    printf("Error Message: \n\t%s", szError);
+    return (*env).NewStringUTF(szError);
+  }
+
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDeviceAutoConfigureSet
+  (JNIEnv * env, jobject obj, jboolean autoConfigure){
+
+    return FDwfDeviceAutoConfigureSet(hdwf, autoConfigure);
+  }
 
 /************************************************************
 *                                                           *
@@ -73,6 +86,12 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDigitalIOOutputSet
   (JNIEnv * env, jobject obj, jint outputSetMask){
   
     return FDwfDigitalIOOutputSet(hdwf, outputSetMask);
+  }
+
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfDigitalIOConfigure
+  (JNIEnv * env, jobject obj){
+
+    return FDwfDigitalIOConfigure(hdwf);
   }
 
 /************************************************************
@@ -183,8 +202,7 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInBufferSize
 
 JNIEXPORT jbyte JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInStatus
   (JNIEnv * env, jobject obj, jboolean readData){
-  
-  
+
     DwfState dwfState;
     FDwfAnalogInStatus(hdwf, readData, &dwfState);
     return dwfState;
@@ -313,13 +331,13 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutConfigure
 JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutRepeatSet
   (JNIEnv * env, jobject obj, jint idxChannel, jint repeat){
   
-      return FDwfAnalogOutRepeatSet(hdwf, idxChannel, repeat);
+    return FDwfAnalogOutRepeatSet(hdwf, idxChannel, repeat);
   }
 
 JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutRunSet
   (JNIEnv * env, jobject obj, jint idxChannel, jdouble secRun){
   
-      return FDwfAnalogOutRunSet(hdwf, idxChannel, secRun);
+    return FDwfAnalogOutRunSet(hdwf, idxChannel, secRun);
   }
 
 JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutIdleSet
@@ -327,7 +345,64 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutIdleSet
   
     return FDwfAnalogOutIdleSet(hdwf, idxChannel, idle);
   }
-  
+
+JNIEXPORT jintArray JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutNodeDataInfo
+  (JNIEnv * env, jobject obj, jint idxChannel){
+
+  int pnSamplesMin;
+  int pnSamplesMax;
+
+  FDwfAnalogOutNodeDataInfo(hdwf, idxChannel, AnalogOutNodeCarrier, &pnSamplesMin, &pnSamplesMax);
+
+  int cValues[2] = {pnSamplesMin, pnSamplesMax};
+  jintArray jvalues = env->NewIntArray(2);
+  env->SetIntArrayRegion(jvalues, 0, 2, cValues);
+  return jvalues;
+  }
+
+
+
+
+
+
+
+
+
+
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutNodeDataSet
+  (JNIEnv * env, jobject obj, jint idxChannel, jdoubleArray rgdData, jint size){
+
+  //double *input = new double[size];
+//  env->GetDoubleArrayRegion( rgdData, 0, size, &input[0] );
+
+  double *input = new double[size];
+  jsize len = env->GetArrayLength(rgdData);
+  jdouble *body = env->GetDoubleArrayElements(rgdData, 0);
+  int i = 0;
+  for (i=0; i<len; i++) {
+     input[i] = body[i];
+  }
+  return FDwfAnalogOutNodeDataSet(hdwf, idxChannel, AnalogOutNodeCarrier, input, size);
+
+//  double *input = new double[size];
+//  env->SetDoubleArrayRegion(input, 0, size, rgdData);
+
+//double rgdSamples[4096];
+//for(int i = 0; i < 4096; i++){
+// rgdSamples[i] = 2.0*i/4095-1;
+// }
+//  return FDwfAnalogOutNodeDataSet(hdwf, idxChannel, AnalogOutNodeCarrier, rgdSamples, 4096);
+  }
+
+
+
+
+
+
+
+
+
+
 /************************************************************
 *                                                           *
 *                      Analog I/O                           *
@@ -347,3 +422,8 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogIOEnableSet
     return FDwfAnalogIOEnableSet(hdwf, masterEnable);
   }
   
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogIOConfigure
+  (JNIEnv * env, jobject obj){
+
+  return FDwfAnalogIOConfigure(hdwf);
+  }
