@@ -93,6 +93,7 @@ You need to find where the Java JNI Headers are located first and use it for the
     sudo find / -name "jni.h"
     find / -name jni_md.h 2> /dev/null
 
+    cd .../.../waveforms4j
     gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o waveforms4j.dylib
     mv ./waveforms4j.dylib ./src/main/resources
 
@@ -103,7 +104,7 @@ You need to find where the Java JNI Headers are located first and use it for the
     sudo find / -name "jni.h"
     find / -name jni_md.h 2> /dev/null
 
-	cd ~/workspace/waveforms4j
+	cd .../.../waveforms4j
     gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/lib -ldwf
     mv ./waveforms4j.so ./src/main/resources
 
