@@ -157,7 +157,7 @@ Or if you use Maven, add the following to your pom file:
 <dependency>
     <groupId>org.knowm</groupId>
     <artifactId>waveforms4j</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
 </dependency>
 ```
 For snapshots, add the following to your pom.xml file:
@@ -171,26 +171,6 @@ For snapshots, add the following to your pom.xml file:
 <dependency>
     <groupId>org.knowm</groupId>
     <artifactId>waveforms4j</artifactId>
-    <version>0.0.5-SNAPHOT</version>
+    <version>0.0.6-SNAPHOT</version>
 </dependency>
 ```
-
-## Windows things tried
-
-### Verified `C:\Windows\system32` is on PATH
-
-	C:\Users\Tim\Documents\GitHub\waveforms4j>echo %PATH%
-	C:\Program Files\mingw-w64\x86_64-6.2.0-posix-seh-rt_v5-rev1\mingw64\bin;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\system32\config\systemprofile\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Users\Tim\AppData\Local\Microsoft\WindowsApps;
-
-### Run from command line, not Eclipse
-
-	java -cp C:\Users\Tim\Documents\GitHub\waveforms4j\target AnalogOutSine
-	
-cd C:\Users\Tim\Documents\GitHub\waveforms4j
-"C:\Program Files\Java\jdk1.8.0_121\bin\javac.exe" -d C:\Users\Tim\Documents\GitHub\waveforms4j\out -sourcepath C:\Users\Tim\Documents\GitHub\waveforms4j\src\main\java -cp "C:\Users\Tim\.m2\repository\org\slf4j\slf4j-api\1.7.21\slf4j-api-1.7.21.jar" C:\Users\Tim\Documents\GitHub\waveforms4j\src\main\java\org\knowm\waveforms4j\DLLTest.java
-
-cd out
-
-java -cp C:\Users\Tim\Documents\GitHub\waveforms4j\out\org\knowm\waveforms4j\out\*;C:\Users\Tim\.m2\repository\org\slf4j\slf4j-api\1.7.21\slf4j-api-1.7.21.jar org.knowm.waveforms4j.DLLTest
-	
-	
