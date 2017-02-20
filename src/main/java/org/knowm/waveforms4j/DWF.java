@@ -245,7 +245,12 @@ public class DWF {
 
   public native boolean FDwfAnalogInAcquisitionModeSet(int mode);
 
-  public boolean startAnalogCaptureBothChannels(double frequency, int buffersize, AcquisitionMode acquisitionMode) {
+  public boolean stopAnalogCaptureBothChannels() {
+
+    return FDwfAnalogInConfigure(true, false);
+  }
+
+  public boolean startAnalogCaptureBothChannelsImmediately(double frequency, int buffersize, AcquisitionMode acquisitionMode) {
 
     FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
     FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
@@ -257,9 +262,33 @@ public class DWF {
     return FDwfAnalogInConfigure(true, true);
   }
 
-  public boolean stopAnalogCaptureBothChannels() {
+  public boolean startAnalogCaptureBothChannelsLevelTrigger(double sampleFrequency, double triggerLevel) {
 
-    return FDwfAnalogInConfigure(true, false);
+    FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
+    FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
+    FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
+    FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, 2.5);
+    FDwfAnalogInFrequencySet(sampleFrequency);
+    FDwfAnalogInBufferSizeSet(AD2_MAX_BUFFER_SIZE);
+    FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
+    // Trigger single capture on rising edge of analog signal pulse
+    FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger
+    FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcDetectorAnalogIn.getId()); // one of the analog in channels
+    FDwfAnalogInTriggerTypeSet(AnalogTriggerType.trigtypeEdge.getId());
+    FDwfAnalogInTriggerChannelSet(0); // first channel
+    // Trigger Level
+    if (triggerLevel > 0) {
+      FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
+      FDwfAnalogInTriggerLevelSet(triggerLevel);
+    }
+    else {
+      FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
+      FDwfAnalogInTriggerLevelSet(triggerLevel);
+    }
+
+    // arm the capture
+    FDwfAnalogInConfigure(true, true);
+    return true;
   }
 
   // TRIGGER SETTINGS
