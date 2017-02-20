@@ -326,13 +326,13 @@ public class DWF {
   public boolean startSinglePulse(int idxChannel, Waveform waveform, double frequency, double amplitude, double offset, double dutyCycle) {
 
     FDwfAnalogOutRepeatSet(idxChannel, 1);
-    double secRun = 1 / frequency /2;
+    double secRun = 1 / frequency / 2;
     FDwfAnalogOutRunSet(idxChannel, secRun);
     FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
     return startWave(idxChannel, waveform, frequency, amplitude, offset, dutyCycle);
   }
 
-  public boolean startCustomPulseTrain(int idxChannel, double frequency, double amplitude, double offset, int numPulses) {
+  public boolean startCustomPulseTrain(int idxChannel, double frequency, double offset, int numPulses, double[] rgdData) {
 
     FDwfAnalogOutRepeatSet(idxChannel, 1);
     double secRun = 1 / frequency * numPulses;
@@ -344,22 +344,8 @@ public class DWF {
     if (!FDwfAnalogOutNodeFrequencySet(idxChannel, frequency)) return false;
     if (!FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0)) return false; // manually set to full amplitude
     if (!FDwfAnalogOutNodeOffsetSet(idxChannel, offset)) return false;
-    // generate custom waveform
-    // read pulses
-    double readPulseMagnitude = .1 / 5.0;
-    int size = 1024; // could go up to 4096
-    double[] rgdData = new double[size];
-    for (int i = size / 4; i < size * 3 / 4; i++) {
-      rgdData[i] = amplitude / 5.0;
-    }
-    for (int i = 0; i < size / 8; i++) {
-      rgdData[i] = readPulseMagnitude;
-    }
-    for (int i = size * 7 / 8; i < size; i++) {
-      rgdData[i] = readPulseMagnitude;
-    }
 
-    FDwfAnalogOutNodeDataSet(idxChannel, rgdData, size);
+    FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
 
     if (!FDwfAnalogOutConfigure(idxChannel, true)) return false;
 
