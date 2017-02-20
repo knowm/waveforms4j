@@ -114,7 +114,7 @@ You need to find where the Java JNI Headers are located first and use it for the
 
 You need to install a GCC compiler for Windows such as [Mingw-64](https://sourceforge.net/projects/mingw-w64/).
 
-	cd C:\Users\Tim\Documents\GitHub\waveforms4j
+	cd C:\...\...\...\waveforms4j
 	g++ -static -static-libgcc -static-libstdc++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -I"C:\Program Files\Java\jdk1.8.0_121\include" -I"C:\Program Files\Java\jdk1.8.0_121\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Program Files\Digilent\WaveFormsSDK\lib\x64" -ldwf
     move ./waveforms4j.dll ./src/main/resources
 

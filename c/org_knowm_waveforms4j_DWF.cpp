@@ -354,9 +354,10 @@ JNIEXPORT jintArray JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogOutNodeData
 
   FDwfAnalogOutNodeDataInfo(hdwf, idxChannel, AnalogOutNodeCarrier, &pnSamplesMin, &pnSamplesMax);
 
-  int cValues[2] = {pnSamplesMin, pnSamplesMax};
+  //int cValues[2] = {pnSamplesMin, pnSamplesMax};
   jintArray jvalues = env->NewIntArray(2);
-  env->SetIntArrayRegion(jvalues, 0, 2, cValues);
+  jint outCArray[] = {pnSamplesMin, pnSamplesMax};
+  env->SetIntArrayRegion(jvalues, 0, 2, outCArray);
   return jvalues;
   }
 
