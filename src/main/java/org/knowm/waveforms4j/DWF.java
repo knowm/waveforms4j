@@ -252,42 +252,58 @@ public class DWF {
 
   public boolean startAnalogCaptureBothChannelsImmediately(double frequency, int buffersize, AcquisitionMode acquisitionMode) {
 
-    FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
-    FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
-    FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
-    FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, 2.5);
-    FDwfAnalogInFrequencySet(frequency);
-    FDwfAnalogInBufferSizeSet(buffersize);
-    FDwfAnalogInAcquisitionModeSet(acquisitionMode.getId());
-    return FDwfAnalogInConfigure(true, true);
+    boolean success = true;
+    success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
+    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
+    success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
+    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, 2.5);
+    success = success && FDwfAnalogInFrequencySet(frequency);
+    success = success && FDwfAnalogInBufferSizeSet(buffersize);
+    success = success && FDwfAnalogInAcquisitionModeSet(acquisitionMode.getId());
+    success = success && FDwfAnalogInConfigure(true, true);
+    success = success && FDwfAnalogInConfigure(true, true);
+    if (!success) {
+      FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
+      FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
+      FDwfAnalogInConfigure(false, false);
+      throw new DWFException(FDwfGetLastErrorMsg());
+    }
+    return true;
   }
 
   public boolean startAnalogCaptureBothChannelsLevelTrigger(double sampleFrequency, double triggerLevel) {
 
-    FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
-    FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
-    FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
-    FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, 2.5);
-    FDwfAnalogInFrequencySet(sampleFrequency);
-    FDwfAnalogInBufferSizeSet(AD2_MAX_BUFFER_SIZE);
-    FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
+    boolean success = true;
+    success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
+    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
+    success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
+    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, 2.5);
+    success = success && FDwfAnalogInFrequencySet(sampleFrequency);
+    success = success && FDwfAnalogInBufferSizeSet(AD2_MAX_BUFFER_SIZE);
+    success = success && FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
     // Trigger single capture on rising edge of analog signal pulse
-    FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger
-    FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcDetectorAnalogIn.getId()); // one of the analog in channels
-    FDwfAnalogInTriggerTypeSet(AnalogTriggerType.trigtypeEdge.getId());
-    FDwfAnalogInTriggerChannelSet(0); // first channel
+    success = success && FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger
+    success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcDetectorAnalogIn.getId()); // one of the analog in channels
+    success = success && FDwfAnalogInTriggerTypeSet(AnalogTriggerType.trigtypeEdge.getId());
+    success = success && FDwfAnalogInTriggerChannelSet(0); // first channel
     // Trigger Level
     if (triggerLevel > 0) {
-      FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
-      FDwfAnalogInTriggerLevelSet(triggerLevel);
+      success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
+      success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
     }
     else {
-      FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
-      FDwfAnalogInTriggerLevelSet(triggerLevel);
+      success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
+      success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
     }
 
     // arm the capture
-    FDwfAnalogInConfigure(true, true);
+    success = success && FDwfAnalogInConfigure(true, true);
+    if (!success) {
+      FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
+      FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
+      FDwfAnalogInConfigure(false, false);
+      throw new DWFException(FDwfGetLastErrorMsg());
+    }
     return true;
   }
 
@@ -330,13 +346,19 @@ public class DWF {
 
   public boolean startWave(int idxChannel, Waveform waveform, double frequency, double amplitude, double offset, double dutyCycle) {
 
-    if (!FDwfAnalogOutNodeEnableSet(idxChannel, true)) return false;
-    if (!FDwfAnalogOutNodeFunctionSet(idxChannel, waveform.getId())) return false;
-    if (!FDwfAnalogOutNodeFrequencySet(idxChannel, frequency)) return false;
-    if (!FDwfAnalogOutNodeAmplitudeSet(idxChannel, amplitude)) return false;
-    if (!FDwfAnalogOutNodeOffsetSet(idxChannel, offset)) return false;
-    if (!FDwfAnalogOutNodeSymmetrySet(idxChannel, dutyCycle)) return false;
-    if (!FDwfAnalogOutConfigure(idxChannel, true)) return false;
+    boolean success = true;
+    success = success && FDwfAnalogOutNodeEnableSet(idxChannel, true);
+    success = success && FDwfAnalogOutNodeFunctionSet(idxChannel, waveform.getId());
+    success = success && FDwfAnalogOutNodeFrequencySet(idxChannel, frequency);
+    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, amplitude);
+    success = success && FDwfAnalogOutNodeOffsetSet(idxChannel, offset);
+    success = success && FDwfAnalogOutNodeSymmetrySet(idxChannel, dutyCycle);
+    success = success && FDwfAnalogOutConfigure(idxChannel, true);
+    if (!success) {
+      FDwfAnalogOutNodeEnableSet(idxChannel, false);
+      FDwfAnalogOutConfigure(idxChannel, false);
+      throw new DWFException(FDwfGetLastErrorMsg());
+    }
     return true;
   }
 
@@ -352,32 +374,35 @@ public class DWF {
 
   public native boolean FDwfAnalogOutIdleSet(int idxChannel, int idle);
 
-  public boolean startSinglePulse(int idxChannel, Waveform waveform, double frequency, double amplitude, double offset, double dutyCycle) {
-
-    FDwfAnalogOutRepeatSet(idxChannel, 1);
-    double secRun = 1 / frequency / 2;
-    FDwfAnalogOutRunSet(idxChannel, secRun);
-    FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
-    return startWave(idxChannel, waveform, frequency, amplitude, offset, dutyCycle);
-  }
+  // public boolean startSinglePulse(int idxChannel, Waveform waveform, double frequency, double amplitude, double offset, double dutyCycle) {
+  //
+  //   FDwfAnalogOutRepeatSet(idxChannel, 1);
+  //   double secRun = 1 / frequency / 2;
+  //   FDwfAnalogOutRunSet(idxChannel, secRun);
+  //   FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
+  //   return startWave(idxChannel, waveform, frequency, amplitude, offset, dutyCycle);
+  // }
 
   public boolean startCustomPulseTrain(int idxChannel, double frequency, double offset, int numPulses, double[] rgdData) {
 
-    FDwfAnalogOutRepeatSet(idxChannel, 1);
+    boolean success = true;
+
+    success = success && FDwfAnalogOutRepeatSet(idxChannel, 1);
     double secRun = 1 / frequency * numPulses;
-    FDwfAnalogOutRunSet(idxChannel, secRun);
-    FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
-
-    if (!FDwfAnalogOutNodeEnableSet(idxChannel, true)) return false;
-    if (!FDwfAnalogOutNodeFunctionSet(idxChannel, Waveform.Custom.getId())) return false;
-    if (!FDwfAnalogOutNodeFrequencySet(idxChannel, frequency)) return false;
-    if (!FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0)) return false; // manually set to full amplitude
-    if (!FDwfAnalogOutNodeOffsetSet(idxChannel, offset)) return false;
-
-    FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
-
-    if (!FDwfAnalogOutConfigure(idxChannel, true)) return false;
-
+    success = success && FDwfAnalogOutRunSet(idxChannel, secRun);
+    success = success && FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
+    success = success && FDwfAnalogOutNodeEnableSet(idxChannel, true);
+    success = success && FDwfAnalogOutNodeFunctionSet(idxChannel, Waveform.Custom.getId());
+    success = success && FDwfAnalogOutNodeFrequencySet(idxChannel, frequency);
+    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0); // manually set to full amplitude
+    success = success && FDwfAnalogOutNodeOffsetSet(idxChannel, offset);
+    success = success && FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
+    success = success && FDwfAnalogOutConfigure(idxChannel, true);
+    if (!success) {
+      FDwfAnalogOutNodeEnableSet(idxChannel, false);
+      FDwfAnalogOutConfigure(idxChannel, false);
+      throw new DWFException(FDwfGetLastErrorMsg());
+    }
     return true;
   }
 
@@ -393,9 +418,16 @@ public class DWF {
 
   public boolean setPowerSupply(int idxChannel, double value) {
 
-    FDwfAnalogIOChannelNodeSet(idxChannel, 0, 1);
-    FDwfAnalogIOChannelNodeSet(idxChannel, 1, value);
-    FDwfAnalogIOEnableSet(true);
-    return FDwfAnalogIOConfigure();
+    boolean success = true;
+    success = success && FDwfAnalogIOChannelNodeSet(idxChannel, 0, 1);
+    success = success && FDwfAnalogIOChannelNodeSet(idxChannel, 1, value);
+    success = success && FDwfAnalogIOEnableSet(true);
+    success = success && FDwfAnalogIOConfigure();
+    if (!success) {
+      success = success && FDwfAnalogIOEnableSet(false);
+      success = success && FDwfAnalogIOConfigure();
+      throw new DWFException(FDwfGetLastErrorMsg());
+    }
+    return true;
   }
 }
