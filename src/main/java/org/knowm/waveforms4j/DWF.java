@@ -424,8 +424,8 @@ public class DWF {
     success = success && FDwfAnalogIOEnableSet(true);
     success = success && FDwfAnalogIOConfigure();
     if (!success) {
-      success = success && FDwfAnalogIOEnableSet(false);
-      success = success && FDwfAnalogIOConfigure();
+      FDwfAnalogIOEnableSet(false);
+      FDwfAnalogIOConfigure();
       throw new DWFException(FDwfGetLastErrorMsg());
     }
     return true;
