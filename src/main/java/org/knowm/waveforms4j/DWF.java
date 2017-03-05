@@ -273,6 +273,8 @@ public class DWF {
 
   public boolean startAnalogCaptureBothChannelsLevelTrigger(double sampleFrequency, double triggerLevel) {
 
+    // System.out.println("triggerLevel = " + triggerLevel);
+
     boolean success = true;
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
     success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);

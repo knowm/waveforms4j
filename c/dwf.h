@@ -117,13 +117,13 @@ const TRIGSRC trigsrcExternal4          = 14;
 // instrument states:
 typedef BYTE DwfState;
 const DwfState DwfStateReady        = 0;
-const DwfState DwfStateConfig       = 4;
-const DwfState DwfStatePrefill      = 5;
 const DwfState DwfStateArmed        = 1;
-const DwfState DwfStateWait         = 7;
+const DwfState DwfStateDone         = 2;
 const DwfState DwfStateTriggered    = 3;
 const DwfState DwfStateRunning      = 3;
-const DwfState DwfStateDone         = 2;
+const DwfState DwfStateConfig       = 4;
+const DwfState DwfStatePrefill      = 5;
+const DwfState DwfStateWait         = 7;
 
 //
 typedef int DwfEnumConfigInfo;
