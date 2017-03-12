@@ -32,8 +32,12 @@ import java.io.IOException;
 
 import cz.adamh.utils.NativeUtils;
 import org.multibit.platform.builder.OSUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DWF {
+
+  private static final Logger logger = LoggerFactory.getLogger(DWF.class);
 
   static {
     try {
@@ -239,11 +243,15 @@ public class DWF {
 
   public native int FDwfAnalogInStatusSamplesValid();
 
-  public native double[] FDwfAnalogInStatusData(int idxChannel, int size);
+  public native double[] FDwfAnalogInTriggerPositionInfo();
+
+  public native boolean FDwfAnalogInTriggerPositionSet(double secPosition);
 
   public native boolean FDwfAnalogInConfigure(boolean reconfigure, boolean start);
 
   public native boolean FDwfAnalogInAcquisitionModeSet(int mode);
+
+  public native double[] FDwfAnalogInStatusData(int idxChannel, int size);
 
   public boolean stopAnalogCaptureBothChannels() {
 
@@ -271,17 +279,23 @@ public class DWF {
     return true;
   }
 
-  public boolean startAnalogCaptureBothChannelsLevelTrigger(double sampleFrequency, double triggerLevel) {
+  public boolean startAnalogCaptureBothChannelsLevelTrigger(double sampleFrequency, double triggerLevel, int bufferSize) {
 
     // System.out.println("triggerLevel = " + triggerLevel);
+    if (bufferSize > DWF.AD2_MAX_BUFFER_SIZE) {
+      logger.error("Buffer size larger than allowed size. Setting to " + DWF.AD2_MAX_BUFFER_SIZE);
+      bufferSize = DWF.AD2_MAX_BUFFER_SIZE;
+    }
 
     boolean success = true;
+    success = success && FDwfAnalogInFrequencySet(sampleFrequency);
+    success = success && FDwfAnalogInBufferSizeSet(bufferSize);
+    success = success && FDwfAnalogInTriggerPositionSet((bufferSize / 2) / sampleFrequency); // no buffer prefill
+
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
     success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
     success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, 2.5);
-    success = success && FDwfAnalogInFrequencySet(sampleFrequency);
-    success = success && FDwfAnalogInBufferSizeSet(AD2_MAX_BUFFER_SIZE);
     success = success && FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
     // Trigger single capture on rising edge of analog signal pulse
     success = success && FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger

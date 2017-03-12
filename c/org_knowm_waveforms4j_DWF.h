@@ -211,11 +211,19 @@ JNIEXPORT jint JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInStatusSamplesV
 
 /*
  * Class:     org_knowm_waveforms4j_DWF
- * Method:    FDwfAnalogInStatusData
- * Signature: (II)[D
+ * Method:    FDwfAnalogInTriggerPositionInfo
+ * Signature: ()[D
  */
-JNIEXPORT jdoubleArray JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInStatusData
-  (JNIEnv *, jobject, jint, jint);
+JNIEXPORT jdoubleArray JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInTriggerPositionInfo
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_knowm_waveforms4j_DWF
+ * Method:    FDwfAnalogInTriggerPositionSet
+ * Signature: (D)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInTriggerPositionSet
+  (JNIEnv *, jobject, jdouble);
 
 /*
  * Class:     org_knowm_waveforms4j_DWF
@@ -232,6 +240,14 @@ JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInConfigure
  */
 JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInAcquisitionModeSet
   (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     org_knowm_waveforms4j_DWF
+ * Method:    FDwfAnalogInStatusData
+ * Signature: (II)[D
+ */
+JNIEXPORT jdoubleArray JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInStatusData
+  (JNIEnv *, jobject, jint, jint);
 
 /*
  * Class:     org_knowm_waveforms4j_DWF

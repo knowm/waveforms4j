@@ -217,6 +217,46 @@ JNIEXPORT jint JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInStatusSamplesV
   
     return pcSamplesValid;
   }
+
+
+
+
+JNIEXPORT jdoubleArray JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInTriggerPositionInfo
+  (JNIEnv * env, jobject obj){
+
+  double psecMin;
+  double psecMax;
+  double pnSteps;
+
+  FDwfAnalogInTriggerPositionInfo(hdwf, &psecMin, &psecMax, &pnSteps);
+
+  jdoubleArray jvalues = env->NewDoubleArray(3);
+  jdouble outCArray[] = {psecMin, psecMax, pnSteps};
+  env->SetDoubleArrayRegion(jvalues, 0, 3, outCArray);
+  return jvalues;
+  }
+
+
+
+
+JNIEXPORT jboolean JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInTriggerPositionSet
+  (JNIEnv * env, jobject obj, jdouble secPosition){
+
+    return FDwfAnalogInTriggerPositionSet(hdwf, secPosition);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 JNIEXPORT jdoubleArray JNICALL Java_org_knowm_waveforms4j_DWF_FDwfAnalogInStatusData
   (JNIEnv * env, jobject obj, jint idxChannel, jint size){
