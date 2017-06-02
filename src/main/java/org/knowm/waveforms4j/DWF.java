@@ -30,10 +30,11 @@ package org.knowm.waveforms4j;
 
 import java.io.IOException;
 
-import cz.adamh.utils.NativeUtils;
 import org.multibit.platform.builder.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import cz.adamh.utils.NativeUtils;
 
 public class DWF {
 
@@ -43,11 +44,9 @@ public class DWF {
     try {
       if (OSUtils.isMac()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
-      }
-      else if (OSUtils.isLinux()) {
+      } else if (OSUtils.isLinux()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.so");
-      }
-      else if (OSUtils.isWindows()) {
+      } else if (OSUtils.isWindows()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
       }
     } catch (IOException e) {
@@ -55,6 +54,7 @@ public class DWF {
     }
   }
 
+  public static final int WAVEFORM_CHANNEL_BOTH = -1;
   public static final int WAVEFORM_CHANNEL_1 = 0;
   public static final int WAVEFORM_CHANNEL_2 = 1;
   public static final int OSCILLOSCOPE_CHANNEL_1 = 0;
@@ -306,8 +306,7 @@ public class DWF {
     if (triggerLevel > 0) {
       success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
       success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
-    }
-    else {
+    } else {
       success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
       success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
     }
@@ -413,6 +412,41 @@ public class DWF {
     success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0); // manually set to full amplitude
     success = success && FDwfAnalogOutNodeOffsetSet(idxChannel, offset);
     success = success && FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
+    success = success && FDwfAnalogOutConfigure(idxChannel, true);
+    if (!success) {
+      FDwfAnalogOutNodeEnableSet(idxChannel, false);
+      FDwfAnalogOutConfigure(idxChannel, false);
+      throw new DWFException(FDwfGetLastErrorMsg());
+    }
+    return true;
+  }
+
+  public boolean setCustomPulseTrain(int idxChannel, double frequency, double offset, int numPulses, double[] rgdData) {
+
+    boolean success = true;
+
+    success = success && FDwfAnalogOutRepeatSet(idxChannel, 1);
+    double secRun = 1 / frequency * numPulses;
+    success = success && FDwfAnalogOutRunSet(idxChannel, secRun);
+    success = success && FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
+    success = success && FDwfAnalogOutNodeFunctionSet(idxChannel, Waveform.Custom.getId());
+    success = success && FDwfAnalogOutNodeFrequencySet(idxChannel, frequency);
+    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0); // manually set to full amplitude
+    success = success && FDwfAnalogOutNodeOffsetSet(idxChannel, offset);
+    success = success && FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
+    if (!success) {
+      FDwfAnalogOutNodeEnableSet(idxChannel, false);
+      FDwfAnalogOutConfigure(idxChannel, false);
+      throw new DWFException(FDwfGetLastErrorMsg());
+    }
+    return true;
+  }
+
+  public boolean startPulseTrain(int idxChannel) {
+
+    boolean success = true;
+
+    success = success && FDwfAnalogOutNodeEnableSet(idxChannel, true);
     success = success && FDwfAnalogOutConfigure(idxChannel, true);
     if (!success) {
       FDwfAnalogOutNodeEnableSet(idxChannel, false);
