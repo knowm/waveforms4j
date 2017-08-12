@@ -44,9 +44,11 @@ public class DWF {
     try {
       if (OSUtils.isMac()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
-      } else if (OSUtils.isLinux()) {
+      }
+      else if (OSUtils.isLinux()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.so");
-      } else if (OSUtils.isWindows()) {
+      }
+      else if (OSUtils.isWindows()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
       }
     } catch (IOException e) {
@@ -165,9 +167,9 @@ public class DWF {
     }
   }
 
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
   // Device ///////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
 
   public native boolean FDwfDeviceOpen();
 
@@ -175,11 +177,12 @@ public class DWF {
 
   public native String FDwfGetLastErrorMsg();
 
-  public native boolean FDwfDeviceAutoConfigureSet(boolean autoConfigure); // if set true (default), all calls to any Set* method re configures the device which takes a few milliseconds. See https://forum.digilentinc.com/topic/3468-correct-way-to-changeupdate-analogout-waveform-for-waveforms-sdk/
+  public native boolean FDwfDeviceAutoConfigureSet(boolean autoConfigure); // if set true (default), all calls to any Set* method re configures the device which takes a few milliseconds. See
+                                                                           // https://forum.digilentinc.com/topic/3468-correct-way-to-changeupdate-analogout-waveform-for-waveforms-sdk/
 
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
   // Digital I/O //////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
 
   public native boolean FDwfDigitalIOOutputEnableSet(int outputEnableMask);
 
@@ -199,9 +202,9 @@ public class DWF {
     return FDwfDigitalIOInputStatus();
   }
 
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
   // Digital Pattern Out //////////////////////////////////////
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
 
   public native boolean FDwfDigitalOutEnableSet(int idxChannel, boolean enable);
 
@@ -217,9 +220,9 @@ public class DWF {
 
   public native boolean FDwfDigitalOutReset();
 
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
   // Analog In ////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
 
   public native boolean FDwfAnalogInChannelEnableSet(int idxChannel, boolean enable);
 
@@ -306,10 +309,55 @@ public class DWF {
     if (triggerLevel > 0) {
       success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
       success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
-    } else {
+    }
+    else {
       success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
       success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
     }
+
+    // arm the capture
+    success = success && FDwfAnalogInConfigure(true, true);
+    if (!success) {
+      FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
+      FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
+      FDwfAnalogInConfigure(false, false);
+      throw new DWFException(FDwfGetLastErrorMsg());
+    }
+    return true;
+  }
+
+  // this is for trigger from the analog out channel instead of analog in
+  public boolean startAnalogCaptureBothChannelsTriggerW1(double sampleFrequency, int bufferSize) {
+
+    // System.out.println("triggerLevel = " + triggerLevel);
+    if (bufferSize > DWF.AD2_MAX_BUFFER_SIZE) {
+      // logger.error("Buffer size larger than allowed size. Setting to " + DWF.AD2_MAX_BUFFER_SIZE);
+      bufferSize = DWF.AD2_MAX_BUFFER_SIZE;
+    }
+
+    boolean success = true;
+    success = success && FDwfAnalogInFrequencySet(sampleFrequency);
+    success = success && FDwfAnalogInBufferSizeSet(bufferSize);
+    success = success && FDwfAnalogInTriggerPositionSet((bufferSize / 2) / sampleFrequency); // no buffer prefill
+
+    success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
+    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
+    success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
+    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, 2.5);
+    success = success && FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
+    // Trigger single capture on rising edge of analog signal pulse
+    success = success && FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger
+    success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcAnalogOut1.getId()); // one of the analog in channels
+    success = success && FDwfAnalogInTriggerTypeSet(AnalogTriggerType.trigtypeEdge.getId());
+    success = success && FDwfAnalogInTriggerChannelSet(0); // first channel
+    // Trigger Level
+    // / if (triggerLevel > 0) {
+    // success = success && dwfProxy.getDwf().FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
+    // success = success && dwfProxy.getDwf().FDwfAnalogInTriggerLevelSet(triggerLevel);
+    // } else {
+    // success = success && dwfProxy.getDwf().FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
+    // success = success && dwfProxy.getDwf().FDwfAnalogInTriggerLevelSet(triggerLevel);
+    // }
 
     // arm the capture
     success = success && FDwfAnalogInConfigure(true, true);
@@ -335,9 +383,9 @@ public class DWF {
 
   public native boolean FDwfAnalogInTriggerLevelSet(double voltsLevel);
 
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
   // Analog Out ///////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
 
   public native int FDwfAnalogOutTriggerSourceInfo(int idxChannel);
 
@@ -379,7 +427,8 @@ public class DWF {
 
   public boolean stopWave(int idxChannel) {
 
-    FDwfAnalogOutNodeOffsetSet(idxChannel, 0); // shouldn't need this in theory, but DC offset is always lingering (https://forum.digilentinc.com/topic/3465-waveforms-sdk-correctly-start-and-stop-analog-out/)
+    FDwfAnalogOutNodeOffsetSet(idxChannel, 0); // shouldn't need this in theory, but DC offset is always lingering
+                                               // (https://forum.digilentinc.com/topic/3465-waveforms-sdk-correctly-start-and-stop-analog-out/)
     return FDwfAnalogOutConfigure(idxChannel, false);
   }
 
@@ -391,11 +440,11 @@ public class DWF {
 
   // public boolean startSinglePulse(int idxChannel, Waveform waveform, double frequency, double amplitude, double offset, double dutyCycle) {
   //
-  //   FDwfAnalogOutRepeatSet(idxChannel, 1);
-  //   double secRun = 1 / frequency / 2;
-  //   FDwfAnalogOutRunSet(idxChannel, secRun);
-  //   FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
-  //   return startWave(idxChannel, waveform, frequency, amplitude, offset, dutyCycle);
+  // FDwfAnalogOutRepeatSet(idxChannel, 1);
+  // double secRun = 1 / frequency / 2;
+  // FDwfAnalogOutRunSet(idxChannel, secRun);
+  // FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
+  // return startWave(idxChannel, waveform, frequency, amplitude, offset, dutyCycle);
   // }
 
   public boolean startCustomPulseTrain(int idxChannel, double frequency, double offset, int numPulses, double[] rgdData) {
@@ -456,9 +505,9 @@ public class DWF {
     return true;
   }
 
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
   // Analog I/O ///////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////
 
   public native boolean FDwfAnalogIOChannelNodeSet(int idxChannel, int idxNode, double value);
 
