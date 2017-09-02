@@ -327,7 +327,7 @@ public class DWF {
   }
 
   // this is for trigger from the analog out channel instead of analog in
-  public boolean startAnalogCaptureBothChannelsTriggerW1(double sampleFrequency, int bufferSize) {
+  public boolean startAnalogCaptureBothChannelsTriggerOnWaveformGenerator(int waveformGenerator ,double sampleFrequency, int bufferSize) {
 
     // System.out.println("triggerLevel = " + triggerLevel);
     if (bufferSize > DWF.AD2_MAX_BUFFER_SIZE) {
@@ -347,7 +347,14 @@ public class DWF {
     success = success && FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
     // Trigger single capture on rising edge of analog signal pulse
     success = success && FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger
-    success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcAnalogOut1.getId()); // one of the analog in channels
+    
+    if(waveformGenerator==DWF.WAVEFORM_CHANNEL_1) {
+      success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcAnalogOut1.getId()); // one of the analog in channels
+    }else if(waveformGenerator==DWF.WAVEFORM_CHANNEL_2) {
+      success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcAnalogOut2.getId()); // one of the analog in channels
+    }
+    
+  
     success = success && FDwfAnalogInTriggerTypeSet(AnalogTriggerType.trigtypeEdge.getId());
     success = success && FDwfAnalogInTriggerChannelSet(0); // first channel
     // Trigger Level
