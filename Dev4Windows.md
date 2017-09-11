@@ -1,6 +1,6 @@
 ## What to Install on a Fresh System
 
-1. Github Desktop
+1. [Github Desktop](https://desktop.github.com/)
 1. Pull Waveforms4j
 1. Java 8 SDK
 1. Mingw-w64
