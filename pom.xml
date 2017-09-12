@@ -3,7 +3,7 @@
 
     <groupId>org.knowm</groupId>
     <artifactId>waveforms4j</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.9-SNAPSHOT</version>
     <name>waveforms4j</name>
     <description>Digilent Waveforms AD2 SDK Java Implementation</description>
     <url>http://knowm.org/open-source</url>

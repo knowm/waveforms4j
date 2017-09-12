@@ -24,13 +24,15 @@ Download Waveforms 2015 from [Digilent](https://reference.digilentinc.com/refere
 
 Get .deb files from here: <https://reference.digilentinc.com/reference/software/waveforms/waveforms-3>
 
-    sudo mv ~/Downloads/digilent.waveforms_3.3.7_amd64.deb /var/cache/apt/archives
-    cd /var/cache/apt/archives
-    sudo dpkg -i digilent.waveforms_3.3.7_amd64.deb
+```
+sudo mv ~/Downloads/digilent.waveforms_3.3.7_amd64.deb /var/cache/apt/archives
+cd /var/cache/apt/archives
+sudo dpkg -i digilent.waveforms_3.3.7_amd64.deb
     
-    sudo mv ~/Downloads/digilent.adept.runtime_2.16.5-amd64.deb /var/cache/apt/archives
-    cd /var/cache/apt/archives
-    sudo dpkg -i digilent.adept.runtime_2.16.5-amd64.deb
+sudo mv ~/Downloads/digilent.adept.runtime_2.16.5-amd64.deb /var/cache/apt/archives
+cd /var/cache/apt/archives
+sudo dpkg -i digilent.adept.runtime_2.16.5-amd64.deb
+```
 
 ## Install DWF Framework on Windows 10
 
@@ -42,21 +44,23 @@ The SDK for the Digilent Analog Discovery 2 comes in the form of a compiled C++ 
 
 In single class called `DWF` is where our Java app code interacts with the SDK. DWF stands for `Digilent Waveform`. Note that in our `DWF` class, a static block is used to load the JNI library. We need to create this library manually and it's not provided By Digilent.
 
-  static {
-    try {
-      if (OSUtils.isMac()) {
-        NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
-      }
-      else if (OSUtils.isLinux()) {
-          NativeUtils.loadLibraryFromJar("/waveforms4j.so");
-      }
-      else if (OSUtils.isWindows()) {
-          NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+```
+static {
+  try {
+    if (OSUtils.isMac()) {
+      NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
     }
+    else if (OSUtils.isLinux()) {
+      NativeUtils.loadLibraryFromJar("/waveforms4j.so");
+    }
+    else if (OSUtils.isWindows()) {
+      NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
+    }
+  } catch (IOException e) {
+    e.printStackTrace();
   }
+}
+```
     
 The `waveforms4j.dylib`, `waveforms4j.so` and `waveforms4j.dll` file is something we need to create ourselves. This file is the JNI bridge between our Java code and Digilent's binary SDK.
 
@@ -72,13 +76,17 @@ Manually Compile All Java Classes (skip this if using Eclipse or IntelliJ)
 
 Take the `native` methods we've defined in `DWF.java` and create a header file.
 
+```
     // javah -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
     javah -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
+```
 
 ### Windows
 
+```
     // "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
     "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
+```
 
 Note: You need to take those methods created in the header file and implement them in the C++ file.
 
@@ -90,24 +98,26 @@ The following steps outline how to create the JNI library file and put it in the
 
 You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments:
 
-    sudo find / -name "jni.h"
-    find / -name jni_md.h 2> /dev/null
+```
+sudo find / -name "jni.h"
+find / -name jni_md.h 2> /dev/null
 
-    cd .../.../waveforms4j
-    gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o waveforms4j.dylib
-    mv ./waveforms4j.dylib ./src/main/resources
+cd .../.../waveforms4j
+gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o waveforms4j.dylib
+mv ./waveforms4j.dylib ./src/main/resources
+```
 
 ## Linux
 
 You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments:
 
-    sudo find / -name "jni.h"
-    find / -name jni_md.h 2> /dev/null
-
-	cd .../.../waveforms4j
-    gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/lib -ldwf
-    mv ./waveforms4j.so ./src/main/resources
-
+```
+sudo find / -name "jni.h"
+find / -name jni_md.h 2> /dev/null
+cd .../.../waveforms4j
+gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/lib -ldwf
+mv ./waveforms4j.so ./src/main/resources
+```
  
 ## Windows
 
@@ -115,9 +125,11 @@ You need to find where the Java JNI Headers are located first and use it for the
 
 You need to install a GCC compiler for Windows such as [Mingw-64](https://sourceforge.net/projects/mingw-w64/).
 
-	cd C:\...\...\...\waveforms4j
-	g++ -static -static-libgcc -static-libstdc++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -I"C:\Program Files\Java\jdk1.8.0_121\include" -I"C:\Program Files\Java\jdk1.8.0_121\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Program Files\Digilent\WaveFormsSDK\lib\x64" -ldwf
-    move ./waveforms4j.dll ./src/main/resources
+```
+cd C:\...\...\...\waveforms4j
+g++ -static -static-libgcc -static-libstdc++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -I"C:\Program Files\Java\jdk1.8.0_121\include" -I"C:\Program Files\Java\jdk1.8.0_121\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Program Files\Digilent\WaveFormsSDK\lib\x64" -ldwf
+move ./waveforms4j.dll ./src/main/resources
+```
 
 See `Dev4Windows.md` for more details in setting up a Windows10 Dev environment.
 
@@ -161,7 +173,9 @@ Or if you use Maven, add the following to your pom file:
     <version>0.0.7</version>
 </dependency>
 ```
+
 For snapshots, add the following to your pom.xml file:
+
 ```xml
 <repository>
   <id>sonatype-oss-snapshot</id>
