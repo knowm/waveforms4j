@@ -5,7 +5,7 @@
 1. Java 8 SDK
 1. [Mingw-w64](https://sourceforge.net/projects/mingw-w64/)
 1. [Waveforms 2015](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start)
-1. [IntelliJ[(https://www.jetbrains.com/idea/download/index.html#section=windows)
+1. [IntelliJ](https://www.jetbrains.com/idea/download/index.html#section=windows)
 
 ## First Sanity Check - Waveforms 2015
 
