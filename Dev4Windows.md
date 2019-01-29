@@ -4,12 +4,12 @@
 1. Pull Waveforms4j
 1. Java 8 SDK
 1. [Mingw-w64](https://sourceforge.net/projects/mingw-w64/)
-1. [Waveforms 2015](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start)
+1. [Waveforms](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start)
 1. [IntelliJ](https://www.jetbrains.com/idea/download/index.html#section=windows)
 
-## First Sanity Check - Waveforms 2015
+## First Sanity Check - Waveforms
 
-After downloading and installing Waveforms 2015, open it up and make sure it connects to the AD2 device and operates as expected.
+After downloading and installing Waveforms, open it up and make sure it connects to the AD2 device and operates as expected.
 
 ## Second Sanity Check - Compile and Run SDK Example
 
@@ -23,8 +23,8 @@ Open up MinGW.
 
 ## Build Waveforms4J DLL for JNI
 
-	cd C:\Users\timmolter\Documents\GitHub\waveforms4j
-	g++ -static -static-libgcc -static-libstdc++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -I"C:\Program Files\Java\jdk1.8.0_144\include" -I"C:\Program Files\Java\jdk1.8.0_144\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64" -ldwf
+	cd C:\Users\tim\Documents\GitHub\waveforms4j
+	g++ -static -static-libgcc -static-libstdc++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -I"C:\Program Files (x86)\Java\jdk-11.0.2\include" -I"C:\Program Files (x86)\Java\jdk-11.0.2\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64" -ldwf
     move ./waveforms4j.dll ./src/main/resources
 
 Note: the key to solving the UnsatifiedLinkError was here: <http://stackoverflow.com/questions/18138635/mingw-exe-requires-a-few-gcc-dlls-regardless-of-the-code>.
