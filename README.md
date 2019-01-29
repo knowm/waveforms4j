@@ -12,11 +12,11 @@ This library should work for your Java-based Waveforms app by simply adding the 
 
 # Pre-requisites for Development
 
-Obviously Java is required on your platform, and instructions for that are not included here. This library was compiled with Java 8.
+Obviously Java is required on your platform, and instructions for that are not included here. This library was compiled with Java 11.
 
 ## Install DWF Framework on MacOS
 
-Download Waveforms 2015 from [Digilent](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start?redirect=1#newest) and open the DMG file, carrying on as usual. Move the `dwf.framework` to `/Library/Frameworks`, as indicated during the install of Waveforms from the DMG:
+Download Waveforms from [Digilent](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start) and open the DMG file, carrying on as usual. Move the `dwf.framework` to `/Library/Frameworks`, as indicated during the install of Waveforms from the DMG:
 
 ![](AD2_SDK/_img/Framework.png)
 
@@ -103,7 +103,7 @@ sudo find / -name "jni.h"
 find / -name jni_md.h 2> /dev/null
 
 cd .../.../waveforms4j
-gcc-6 -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/include/darwin -F/Library/Frameworks/dwf.framework -framework dwf -o waveforms4j.dylib
+gcc -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home/include/darwin -F/Library/Frameworks -framework dwf -o waveforms4j.dylib
 mv ./waveforms4j.dylib ./src/main/resources
 ```
 
@@ -149,7 +149,8 @@ A simple test to see if the JNI library works is to run `AnalogOutSine.java`. If
 
 ### general
 
-    mvn clean package  
+    mvn clean package
+    mvn clean install  
     mvn javadoc:javadoc  
     
 Since we moved the JNI libs into `src/main/resources` in the above step, they are bundled in the jar.
