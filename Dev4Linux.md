@@ -1,15 +1,12 @@
 ## What to Install on a Fresh System
 
-### Waveforms4j
+1. `sudo apt install git`, `mkdir Github`, `cd Github`, `git clone https://github.com/knowm/waveforms4j.git`
+1. Gitcola - install through Discover App
+1. Java 11 SDK
+1. [Waveforms](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start)
+1. Eclipse - download installer and extract zip file from eclipse.org. 
 
-```
-sudo apt-get update
-sudo apt install git
-mkdir Github
-cd Github
-git clone https://github.com/knowm/waveforms4j.git
 
-```
 ## Install DWF Framework on Linux
 
 Download .deb files from here: <https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start>
@@ -24,7 +21,12 @@ cd /var/cache/apt/archives
 sudo dpkg -i digilent.waveforms_3.6.8_amd64.deb
 ```
     
-### Java 8
+### Java 11
+
+As of 30.01.2019, Ubuntu 10.04 LTS doesn't upgrade to Java 11, so we do it manually. Otherwise we could do it with `sudo apt-get install default-jdk` if it wasn't already on Java 11. 
+
+Download .deb files from here: <https://packages.ubuntu.com/cosmic/amd64/openjdk-11-jdk/download>
+
 
 ```
 sudo add-apt-repository -y ppa:webupd8team/java
