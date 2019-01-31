@@ -7,6 +7,10 @@
 1. [Waveforms](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start)
 1. [IntelliJ](https://www.jetbrains.com/idea/download/index.html#section=windows)
 
+## Install DWF Framework on Windows 10
+
+Download Waveforms from [Digilent](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start?redirect=1#newest) and launch it to run the installation wizard. This process will install the required frameworks.
+
 ## First Sanity Check - Waveforms
 
 After downloading and installing Waveforms, open it up and make sure it connects to the AD2 device and operates as expected.

@@ -12,31 +12,7 @@ This library should work for your Java-based Waveforms app by simply adding the 
 
 # Pre-requisites for Development
 
-Obviously Java is required on your platform, and instructions for that are not included here. This library was compiled with Java 11.
-
-## Install DWF Framework on MacOS
-
-Download Waveforms from [Digilent](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start) and open the DMG file, carrying on as usual. Move the `dwf.framework` to `/Library/Frameworks`, as indicated during the install of Waveforms from the DMG:
-
-![](AD2_SDK/_img/Framework.png)
-
-## Install DWF Framework on Linux
-
-Get .deb files from here: <https://reference.digilentinc.com/reference/software/waveforms/waveforms-3>
-
-```
-sudo mv ~/Downloads/digilent.waveforms_3.3.7_amd64.deb /var/cache/apt/archives
-cd /var/cache/apt/archives
-sudo dpkg -i digilent.waveforms_3.3.7_amd64.deb
-    
-sudo mv ~/Downloads/digilent.adept.runtime_2.16.5-amd64.deb /var/cache/apt/archives
-cd /var/cache/apt/archives
-sudo dpkg -i digilent.adept.runtime_2.16.5-amd64.deb
-```
-
-## Install DWF Framework on Windows 10
-
-Download Waveforms 2015 from [Digilent](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start?redirect=1#newest) and launch it to run the installation wizard. This process will install the required frameworks.
+See separate instructions for different operating systems.
 
 ## Accessing the AD2 SDK from Java
 
@@ -77,15 +53,15 @@ Manually Compile All Java Classes (skip this if using Eclipse or IntelliJ)
 Take the `native` methods we've defined in `DWF.java` and create a header file.
 
 ```
-    // javah -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
-    javah -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
+// javah -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
+javah -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
 ```
 
 ### Windows
 
 ```
-    // "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
-    "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
+// "C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
+"C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
 ```
 
 Note: You need to take those methods created in the header file and implement them in the C++ file.
@@ -105,18 +81,6 @@ find / -name jni_md.h 2> /dev/null
 cd .../.../waveforms4j
 gcc -lstdc++ -shared ./c/org_knowm_waveforms4j_DWF.cpp -I/Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home/include/darwin -F/Library/Frameworks -framework dwf -o waveforms4j.dylib
 mv ./waveforms4j.dylib ./src/main/resources
-```
-
-## Linux
-
-You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments:
-
-```
-sudo find / -name "jni.h"
-find / -name jni_md.h 2> /dev/null
-cd .../.../waveforms4j
-gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -L/usr/lib -ldwf
-mv ./waveforms4j.so ./src/main/resources
 ```
  
 ## Windows
@@ -140,7 +104,7 @@ A simple test to see if the JNI library works is to run `AnalogOutSine.java`. If
 ## Some Resources
 
 1. [Adept SDK Docs](https://reference.digilentinc.com/reference/software/adept/start?redirect=1id=digilent_adept_2#software_downloads)
-1. [Waveforms 2015 Downloads](https://reference.digilentinc.com//reference/software/waveforms/waveforms-3/start?redirect=1id=waveforms3)
+1. [Waveforms Downloads](https://reference.digilentinc.com//reference/software/waveforms/waveforms-3/start?redirect=1id=waveforms3)
 1. [Analog Discovery 2 Reference Manual](https://reference.digilentinc.com/analog_discovery_2/refmanual)
 1. [Digilent's DWF library wrapper for python](https://github.com/amuramatsu/dwf)
 1. [Waveforms3 Manual](https://reference.digilentinc.com/waveforms3/refmanual)
