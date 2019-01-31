@@ -7,6 +7,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef org_knowm_waveforms4j_DWF_WAVEFORM_CHANNEL_BOTH
+#define org_knowm_waveforms4j_DWF_WAVEFORM_CHANNEL_BOTH -1L
 #undef org_knowm_waveforms4j_DWF_WAVEFORM_CHANNEL_1
 #define org_knowm_waveforms4j_DWF_WAVEFORM_CHANNEL_1 0L
 #undef org_knowm_waveforms4j_DWF_WAVEFORM_CHANNEL_2
