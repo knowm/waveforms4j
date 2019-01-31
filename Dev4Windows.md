@@ -25,6 +25,29 @@ Open up MinGW.
     gcc digitalout_pins.cpp -o digitalout_pins.out -L"C:\Program Files\Digilent\WaveFormsSDK\lib\x64" -ldwf
     digitalout_pins.out
 
+## Compile Java Code and Generate Header File
+
+Move to project directory
+    
+    cd ~/path/to/waveforms4j
+
+Manually Compile All Java Classes (skip this if using Eclipse or IntelliJ)
+
+    javac src/main/java/org/knowm/waveforms4j/*.java
+
+Take the `native` methods we've defined in `DWF.java` and create a header file.
+
+```
+// javah -jni -classpath src/main/java -d ./c org.knowm.waveforms4j.DWF
+javah -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
+```
+
+```
+"C:\Program Files\Java\jdk1.8.0_112\bin\javah" -jni -classpath target/classes -d ./c org.knowm.waveforms4j.DWF
+```
+
+Note: You need to take those methods created in the header file and implement them in the C++ file.
+
 ## Build Waveforms4J DLL for JNI
 
 You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments. This is usually somewhere such as: C:\Program Files\Java\jdk1.8.0_112.

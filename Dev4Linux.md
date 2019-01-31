@@ -79,10 +79,7 @@ Take the `native` methods we've defined in `DWF.java` and create a header file.
 ```
 javac -cp ./src/main/java:/home/tim/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar -h ./c src/main/java/org/knowm/waveforms4j/DWF.java
 ```
-
-
-
-
+Note: You need to take those methods created in the header file and implement them in the C++ file.
 
 ## Building the JNI Library
 
