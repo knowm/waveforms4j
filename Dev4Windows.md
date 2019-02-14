@@ -1,11 +1,9 @@
 ## What to Install on a Fresh System
 
-1. [Github Desktop](https://desktop.github.com/)
-1. Pull Waveforms4j
 1. [Java 11 SDK](https://stackoverflow.com/a/52531093/1625820)
+1. [IntelliJ](https://www.jetbrains.com/idea/download/index.html#section=windows)
 1. [Mingw-w64](https://sourceforge.net/projects/mingw-w64/)
 1. [Waveforms](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start)
-1. [IntelliJ](https://www.jetbrains.com/idea/download/index.html#section=windows)
 
 ## Install DWF Framework on Windows 10
 

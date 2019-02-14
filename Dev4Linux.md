@@ -1,17 +1,10 @@
 ## What to Install on a Fresh System
 
-1. `sudo apt install git`, `mkdir Github`, `cd Github`, `git clone https://github.com/knowm/waveforms4j.git`
-1. Gitcola - install through Discover App
 1. Java 11 SDK - see below
-1. Eclipse - see below
-1. [Waveforms](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start)
-
-### Setup Git
-
-```
-git config --global user.email "tim@knowm.org"
-git config --global user.name "Tim Molter"
-```
+1. IntelliJ - see below
+1. Waveforms - see below
+1. Git - use the git tool in IntelliJ
+1. Maven - use the maven plugin in IntelliJ (Maven Helper)
 
 ### Java 11
 
@@ -24,7 +17,9 @@ sudo apt-get remove openjdk-*
 sudo apt-get purge openjdk-*
 sudo apt autoremove
 
-cd /usr/lib/jvm
+cd /usr/lib
+mkdir jdk
+cd jdk
 sudo tar -xvzf ~/Downloads/openjdk-11.0.2_linux-x64_bin.tar.gz
 nano ~/.bashrc
 ```
@@ -32,8 +27,8 @@ nano ~/.bashrc
 Add to bottom of fine:
 
 ```
-export JAVA_HOME=/usr/lib/jvm/jdk-11.0.2
-export PATH=${PATH}:${JAVA_HOME}/bin
+export JAVA_HOME=/usr/lib/jdk/jdk-11.0.2
+export PATH=$PATH:$JAVA_HOME/bin
 ```
 
 Restart Console.
@@ -41,27 +36,34 @@ Restart Console.
 ```
 java -version
 ```
-    
-### Eclipse
 
-[Download for Linux](https://www.eclipse.org/downloads/) and extract zip file from eclipse.org.
+### IntelliJ
 
-Extract to home directory and double-click `eclipse-inst`. 
+Install from Software Center. Search for "Idea". It's packaged as a "snap".
 
-Open: `/home/tim/eclipse/java-2018-12/eclipse`
+The following did not work. I could not accept the privacy policy as the accept button was greyed out.
+
+[Download for Linux](https://www.jetbrains.com/idea/download/index.html#section=linux) and extract zip file from eclipse.org.
+
+```
+cd /opt
+sudo tar -xvzf ~/Downloads/ideaIC-2018.3.4-no-jdk.tar.gz
+cd /opt/idea-IC-183.5429.30/bin
+./idea.sh
+```
 
 ## Install DWF Framework on Linux
 
 Get .deb files from here: <https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start>
 
-```
-sudo mv ~/Downloads/digilent.waveforms_3.9.1_amd64.deb /var/cache/apt/archives
-cd /var/cache/apt/archives
-sudo dpkg -i digilent.waveforms_3.9.1_amd64.deb
-    
+```  
 sudo mv ~/Downloads/digilent.adept.runtime_2.19.2-amd64.deb /var/cache/apt/archives
 cd /var/cache/apt/archives
 sudo dpkg -i digilent.adept.runtime_2.19.2-amd64.deb
+
+sudo mv ~/Downloads/digilent.waveforms_3.9.1_amd64.deb /var/cache/apt/archives
+cd /var/cache/apt/archives
+sudo dpkg -i digilent.waveforms_3.9.1_amd64.deb
 ```
 
 ## Compile Java Code and Generate Header File
