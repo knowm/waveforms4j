@@ -68,3 +68,11 @@ I used the program Dependency Walker to figure out that the waveforms4j dll depe
 The following steps outline how to create the JNI library file and put it in the `resources` folder, which will get bundled with the deployable jar we build later with Maven. The final step is platform dependent, but the first steps are the same.
 
 
+## Useful Commands (Run in GitBash or Terminal in IntelliJ)
+
+cd /c/Users/knowm/Downloads/Memristor-Discovery/Memristor-Discovery
+"C:\Program Files\Java\jdk-11.0.2\bin\java.exe" -jar memristor-discovery-0.0.7.jar
+
+"C:\Program Files\Java\jdk-11.0.2\bin\java.exe" -jar C:/Users/knowm/Documents/GitHub/memristor-discovery/target/memristor-discovery-0.0.8-SNAPSHOT.jar
+
+https://medium.com/azulsystems/using-jlink-to-build-java-runtimes-for-non-modular-applications-9568c5e70ef4
