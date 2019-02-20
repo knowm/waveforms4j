@@ -44,11 +44,9 @@ public class DWF {
     try {
       if (OSUtils.isMac()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dylib");
-      }
-      else if (OSUtils.isLinux()) {
+      } else if (OSUtils.isLinux()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.so");
-      }
-      else if (OSUtils.isWindows()) {
+      } else if (OSUtils.isWindows()) {
         NativeUtils.loadLibraryFromJar("/waveforms4j.dll");
       }
     } catch (IOException e) {
@@ -117,8 +115,8 @@ public class DWF {
 
   public enum TriggerSource {
 
-    trigsrcNone(0), trigsrcPC(1), trigsrcDetectorAnalogIn(2), trigsrcDetectorDigitalIn(3), trigsrcAnalogIn(4), trigsrcDigitalIn(5), trigsrcDigitalOut(6), trigsrcAnalogOut1(7), trigsrcAnalogOut2(8),
-    trigsrcExternal1(11), trigsrcExternal2(12);
+    trigsrcNone(0), trigsrcPC(1), trigsrcDetectorAnalogIn(2), trigsrcDetectorDigitalIn(3), trigsrcAnalogIn(4), trigsrcDigitalIn(5), trigsrcDigitalOut(
+        6), trigsrcAnalogOut1(7), trigsrcAnalogOut2(8), trigsrcExternal1(11), trigsrcExternal2(12);
 
     private final int id;
 
@@ -227,8 +225,8 @@ public class DWF {
   public native boolean FDwfAnalogInChannelEnableSet(int idxChannel, boolean enable);
 
   /**
-   * Volts range is a bit confusing. For the AD2, there are only two choices: set 'voltsRange' below 5, it will use the -2.5 to +2.5V (5V pk2pk) range and if I set 'voltsRange' above 5, it will use
-   * the -25 to +25V (50V pk2pk) range.
+   * Volts range is a bit confusing. For the AD2, there are only two choices: set 'voltsRange' below 5, it will use the -2.5 to +2.5V (5V pk2pk) range
+   * and if I set 'voltsRange' above 5, it will use the -25 to +25V (50V pk2pk) range.
    *
    * @param idxChannel
    * @param voltsRange
@@ -309,8 +307,7 @@ public class DWF {
     if (triggerLevel > 0) {
       success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
       success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
-    }
-    else {
+    } else {
       success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
       success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
     }
@@ -327,9 +324,9 @@ public class DWF {
   }
 
   // this is for trigger from the analog out channel instead of analog in
-  public boolean startAnalogCaptureBothChannelsTriggerOnWaveformGenerator(int waveformGenerator ,double sampleFrequency, int bufferSize) {
+  public boolean startAnalogCaptureBothChannelsTriggerOnWaveformGenerator(int waveformGenerator, double sampleFrequency, int bufferSize,
+      boolean isScale2Volts) {
 
-    // System.out.println("triggerLevel = " + triggerLevel);
     if (bufferSize > DWF.AD2_MAX_BUFFER_SIZE) {
       // logger.error("Buffer size larger than allowed size. Setting to " + DWF.AD2_MAX_BUFFER_SIZE);
       bufferSize = DWF.AD2_MAX_BUFFER_SIZE;
@@ -341,30 +338,23 @@ public class DWF {
     success = success && FDwfAnalogInTriggerPositionSet((bufferSize / 2) / sampleFrequency); // no buffer prefill
 
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
-    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
+    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, isScale2Volts ? 2 : 6);
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
-    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, 2.5);
+    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, isScale2Volts ? 2 : 6);
+
     success = success && FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
+
     // Trigger single capture on rising edge of analog signal pulse
     success = success && FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger
-    
-    if(waveformGenerator==DWF.WAVEFORM_CHANNEL_1) {
+
+    if (waveformGenerator == DWF.WAVEFORM_CHANNEL_1) {
       success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcAnalogOut1.getId()); // one of the analog in channels
-    }else if(waveformGenerator==DWF.WAVEFORM_CHANNEL_2) {
+    } else if (waveformGenerator == DWF.WAVEFORM_CHANNEL_2) {
       success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcAnalogOut2.getId()); // one of the analog in channels
     }
-    
-  
+
     success = success && FDwfAnalogInTriggerTypeSet(AnalogTriggerType.trigtypeEdge.getId());
     success = success && FDwfAnalogInTriggerChannelSet(0); // first channel
-    // Trigger Level
-    // / if (triggerLevel > 0) {
-    // success = success && dwfProxy.getDwf().FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
-    // success = success && dwfProxy.getDwf().FDwfAnalogInTriggerLevelSet(triggerLevel);
-    // } else {
-    // success = success && dwfProxy.getDwf().FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
-    // success = success && dwfProxy.getDwf().FDwfAnalogInTriggerLevelSet(triggerLevel);
-    // }
 
     // arm the capture
     success = success && FDwfAnalogInConfigure(true, true);
