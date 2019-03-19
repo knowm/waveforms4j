@@ -78,7 +78,7 @@ Or if you use Maven, add the following to your pom file:
 <dependency>
     <groupId>org.knowm</groupId>
     <artifactId>waveforms4j</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.10</version>
 </dependency>
 ```
 
@@ -94,6 +94,6 @@ For snapshots, add the following to your pom.xml file:
 <dependency>
     <groupId>org.knowm</groupId>
     <artifactId>waveforms4j</artifactId>
-    <version>0.0.10-SNAPHOT</version>
+    <version>0.0.11-SNAPHOT</version>
 </dependency>
 ```
