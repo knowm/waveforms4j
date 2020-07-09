@@ -455,7 +455,7 @@ public class DWF {
     success = success && FDwfAnalogOutNodeEnableSet(idxChannel, true);
     success = success && FDwfAnalogOutNodeFunctionSet(idxChannel, Waveform.Custom.getId());
     success = success && FDwfAnalogOutNodeFrequencySet(idxChannel, frequency);
-    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0); // manually set to full amplitude
+    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 1.0);
     success = success && FDwfAnalogOutNodeOffsetSet(idxChannel, offset);
     success = success && FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
     success = success && FDwfAnalogOutConfigure(idxChannel, true);
@@ -477,7 +477,7 @@ public class DWF {
     success = success && FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
     success = success && FDwfAnalogOutNodeFunctionSet(idxChannel, Waveform.Custom.getId());
     success = success && FDwfAnalogOutNodeFrequencySet(idxChannel, frequency);
-    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0); // manually set to full amplitude
+    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 1.0);
     success = success && FDwfAnalogOutNodeOffsetSet(idxChannel, offset);
     success = success && FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
     if (!success) {
