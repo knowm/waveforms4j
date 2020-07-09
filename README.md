@@ -82,18 +82,3 @@ Or if you use Maven, add the following to your pom file:
 </dependency>
 ```
 
-For snapshots, add the following to your pom.xml file:
-
-```xml
-<repository>
-  <id>sonatype-oss-snapshot</id>
-  <snapshots/>
-  <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-</repository>
-
-<dependency>
-    <groupId>org.knowm</groupId>
-    <artifactId>waveforms4j</artifactId>
-    <version>0.0.11-SNAPHOT</version>
-</dependency>
-```
