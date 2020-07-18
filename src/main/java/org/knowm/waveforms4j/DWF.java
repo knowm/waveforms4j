@@ -1,40 +1,32 @@
 /**
- * Waveforms4j is distributed under the GNU General Public License version 3
- * and is also available under alternative licenses negotiated directly
- * with Knowm, Inc.
+ * Waveforms4j is distributed under the GNU General Public License version 3 and is also available
+ * under alternative licenses negotiated directly with Knowm, Inc.
  *
- * Copyright (c) 2016-2017 Knowm Inc. www.knowm.org
+ * <p>Copyright (c) 2016-2017 Knowm Inc. www.knowm.org
  *
- * This package also includes various components that are not part of
- * Waveforms4j itself:
+ * <p>This package also includes various components that are not part of Waveforms4j itself:
  *
- * * `NativeUtils`: Copyright 2012 Adam Heinrich, MIT License
- * * `dwf.h`: Copyright 2013 Digilent Inc., no license defined
- * * `Multibit`: Copyright 2011 multibit.org, MIT License
+ * <p>* `NativeUtils`: Copyright 2012 Adam Heinrich, MIT License * `dwf.h`: Copyright 2013 Digilent
+ * Inc., no license defined * `Multibit`: Copyright 2011 multibit.org, MIT License
  *
- * Knowm, Inc. holds copyright
- * and/or sufficient licenses to all components of the Waveforms4j
- * package, and therefore can grant, at its sole discretion, the ability
- * for companies, individuals, or organizations to create proprietary or
- * open source (even if not GPL) modules which may be dynamically linked at
- * runtime with the portions of Waveforms4j which fall under our
- * copyright/license umbrella, or are distributed under more flexible
- * licenses than GPL.
+ * <p>Knowm, Inc. holds copyright and/or sufficient licenses to all components of the Waveforms4j
+ * package, and therefore can grant, at its sole discretion, the ability for companies, individuals,
+ * or organizations to create proprietary or open source (even if not GPL) modules which may be
+ * dynamically linked at runtime with the portions of Waveforms4j which fall under our
+ * copyright/license umbrella, or are distributed under more flexible licenses than GPL.
  *
- * The 'Knowm' name and logos are trademarks owned by Knowm, Inc.
+ * <p>The 'Knowm' name and logos are trademarks owned by Knowm, Inc.
  *
- * If you have any questions regarding our licensing policy, please
- * contact us at `contact@knowm.org`.
+ * <p>If you have any questions regarding our licensing policy, please contact us at
+ * `contact@knowm.org`.
  */
 package org.knowm.waveforms4j;
 
+import cz.adamh.utils.NativeUtils;
 import java.io.IOException;
-
 import org.multibit.platform.builder.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import cz.adamh.utils.NativeUtils;
 
 public class DWF {
 
@@ -63,8 +55,15 @@ public class DWF {
   public static final int AD2_MAX_BUFFER_SIZE = 8192;
 
   public enum Waveform {
-
-    DC(0), Sine(1), Square(2), Triangle(3), RampUp(4), RampDown(5), Noise(6), Custom(30), Play(31);
+    DC(0),
+    Sine(1),
+    Square(2),
+    Triangle(3),
+    RampUp(4),
+    RampDown(5),
+    Noise(6),
+    Custom(30),
+    Play(31);
 
     private final int id;
 
@@ -80,8 +79,10 @@ public class DWF {
   }
 
   public enum AcquisitionMode {
-
-    Single(0), ScanShift(1), ScanScreen(2), Record(3);
+    Single(0),
+    ScanShift(1),
+    ScanScreen(2),
+    Record(3);
 
     private final int id;
 
@@ -97,8 +98,9 @@ public class DWF {
   }
 
   public enum AnalogOutIdle {
-
-    Disable(0), Offset(1), Initial(2);
+    Disable(0),
+    Offset(1),
+    Initial(2);
 
     private final int id;
 
@@ -114,9 +116,17 @@ public class DWF {
   }
 
   public enum TriggerSource {
-
-    trigsrcNone(0), trigsrcPC(1), trigsrcDetectorAnalogIn(2), trigsrcDetectorDigitalIn(3), trigsrcAnalogIn(4), trigsrcDigitalIn(5), trigsrcDigitalOut(
-        6), trigsrcAnalogOut1(7), trigsrcAnalogOut2(8), trigsrcExternal1(11), trigsrcExternal2(12);
+    trigsrcNone(0),
+    trigsrcPC(1),
+    trigsrcDetectorAnalogIn(2),
+    trigsrcDetectorDigitalIn(3),
+    trigsrcAnalogIn(4),
+    trigsrcDigitalIn(5),
+    trigsrcDigitalOut(6),
+    trigsrcAnalogOut1(7),
+    trigsrcAnalogOut2(8),
+    trigsrcExternal1(11),
+    trigsrcExternal2(12);
 
     private final int id;
 
@@ -132,8 +142,9 @@ public class DWF {
   }
 
   public enum AnalogTriggerType {
-
-    trigtypeEdge(0), trigtypePulse(1), trigtypeTransition(2);
+    trigtypeEdge(0),
+    trigtypePulse(1),
+    trigtypeTransition(2);
 
     private final int id;
 
@@ -149,8 +160,8 @@ public class DWF {
   }
 
   public enum AnalogTriggerCondition {
-
-    trigcondRisingPositive(0), trigcondFallingNegative(1);
+    trigcondRisingPositive(0),
+    trigcondFallingNegative(1);
 
     private final int id;
 
@@ -175,8 +186,11 @@ public class DWF {
 
   public native String FDwfGetLastErrorMsg();
 
-  public native boolean FDwfDeviceAutoConfigureSet(boolean autoConfigure); // if set true (default), all calls to any Set* method re configures the device which takes a few milliseconds. See
-                                                                           // https://forum.digilentinc.com/topic/3468-correct-way-to-changeupdate-analogout-waveform-for-waveforms-sdk/
+  public native boolean FDwfDeviceAutoConfigureSet(
+      boolean
+          autoConfigure); // if set true (default), all calls to any Set* method re configures the
+  // device which takes a few milliseconds. See
+  // https://forum.digilentinc.com/topic/3468-correct-way-to-changeupdate-analogout-waveform-for-waveforms-sdk/
 
   // ///////////////////////////////////////////////////////////
   // Digital I/O //////////////////////////////////////////////
@@ -212,7 +226,8 @@ public class DWF {
 
   public native boolean FDwfDigitalOutCounterSet(int idxChannel, int low, int high);
 
-  public native boolean FDwfDigitalOutCounterInitSet(int idxChannel, boolean high, int dividerValue);
+  public native boolean FDwfDigitalOutCounterInitSet(
+      int idxChannel, boolean high, int dividerValue);
 
   public native boolean FDwfDigitalOutConfigure(boolean start);
 
@@ -225,8 +240,9 @@ public class DWF {
   public native boolean FDwfAnalogInChannelEnableSet(int idxChannel, boolean enable);
 
   /**
-   * Volts range is a bit confusing. For the AD2, there are only two choices: set 'voltsRange' below 5, it will use the -2.5 to +2.5V (5V pk2pk) range
-   * and if I set 'voltsRange' above 5, it will use the -25 to +25V (50V pk2pk) range.
+   * Volts range is a bit confusing. For the AD2, there are only two choices: set 'voltsRange' below
+   * 5, it will use the -2.5 to +2.5V (5V pk2pk) range and if I set 'voltsRange' above 5, it will
+   * use the -25 to +25V (50V pk2pk) range.
    *
    * @param idxChannel
    * @param voltsRange
@@ -259,7 +275,20 @@ public class DWF {
     return FDwfAnalogInConfigure(true, false);
   }
 
-  public boolean startAnalogCaptureBothChannelsImmediately(double frequency, int buffersize, AcquisitionMode acquisitionMode) {
+  /**
+   * this is for triggering immediately
+   *
+   * <p>Volts range is a bit confusing. For the AD2, there are only two choices: set 'voltsRange'
+   * below 5, it will use the -2.5 to +2.5V (5V pk2pk) range and if I set 'voltsRange' above 5, it
+   * will use the -25 to +25V (50V pk2pk) range.
+   *
+   * @param frequency
+   * @param buffersize
+   * @param acquisitionMode
+   * @return
+   */
+  public boolean startAnalogCaptureBothChannelsImmediately(
+      double frequency, int buffersize, AcquisitionMode acquisitionMode) {
 
     boolean success = true;
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
@@ -280,7 +309,20 @@ public class DWF {
     return true;
   }
 
-  public boolean startAnalogCaptureBothChannelsLevelTrigger(double sampleFrequency, double triggerLevel, int bufferSize) {
+  /**
+   * this is for triggering from the analog in channel
+   *
+   * <p>Volts range is a bit confusing. For the AD2, there are only two choices: set 'voltsRange'
+   * below 5, it will use the -2.5 to +2.5V (5V pk2pk) range and if I set 'voltsRange' above 5, it
+   * will use the -25 to +25V (50V pk2pk) range.
+   *
+   * @param sampleFrequency
+   * @param triggerLevel
+   * @param bufferSize
+   * @return
+   */
+  public boolean startAnalogCaptureBothChannelsLevelTrigger(
+      double sampleFrequency, double triggerLevel, int bufferSize) {
 
     // System.out.println("triggerLevel = " + triggerLevel);
     if (bufferSize > DWF.AD2_MAX_BUFFER_SIZE) {
@@ -291,7 +333,10 @@ public class DWF {
     boolean success = true;
     success = success && FDwfAnalogInFrequencySet(sampleFrequency);
     success = success && FDwfAnalogInBufferSizeSet(bufferSize);
-    success = success && FDwfAnalogInTriggerPositionSet((bufferSize / 2) / sampleFrequency); // no buffer prefill
+    success =
+        success
+            && FDwfAnalogInTriggerPositionSet(
+                (bufferSize / 2) / sampleFrequency); // no buffer prefill
 
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
     success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, 2.5);
@@ -300,15 +345,24 @@ public class DWF {
     success = success && FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
     // Trigger single capture on rising edge of analog signal pulse
     success = success && FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger
-    success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcDetectorAnalogIn.getId()); // one of the analog in channels
+    success =
+        success
+            && FDwfAnalogInTriggerSourceSet(
+                DWF.TriggerSource.trigsrcDetectorAnalogIn.getId()); // one of the analog in channels
     success = success && FDwfAnalogInTriggerTypeSet(AnalogTriggerType.trigtypeEdge.getId());
     success = success && FDwfAnalogInTriggerChannelSet(0); // first channel
     // Trigger Level
     if (triggerLevel > 0) {
-      success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondRisingPositive.getId());
+      success =
+          success
+              && FDwfAnalogInTriggerConditionSet(
+                  AnalogTriggerCondition.trigcondRisingPositive.getId());
       success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
     } else {
-      success = success && FDwfAnalogInTriggerConditionSet(AnalogTriggerCondition.trigcondFallingNegative.getId());
+      success =
+          success
+              && FDwfAnalogInTriggerConditionSet(
+                  AnalogTriggerCondition.trigcondFallingNegative.getId());
       success = success && FDwfAnalogInTriggerLevelSet(triggerLevel);
     }
 
@@ -323,24 +377,41 @@ public class DWF {
     return true;
   }
 
-  // this is for trigger from the analog out channel instead of analog in
-  public boolean startAnalogCaptureBothChannelsTriggerOnWaveformGenerator(int waveformGenerator, double sampleFrequency, int bufferSize,
-      boolean isScale2Volts) {
+  /**
+   * this is for triggering from the analog out channel instead of analog in
+   *
+   * <p>Volts range is a bit confusing. For the AD2, there are only two choices: set 'voltsRange'
+   * below 5, it will use the -2.5 to +2.5V (5V pk2pk) range and if I set 'voltsRange' above 5, it
+   * will use the -25 to +25V (50V pk2pk) range.
+   *
+   * @param waveformGenerator
+   * @param sampleFrequency
+   * @param bufferSize
+   * @param isScale2Volts
+   * @return
+   */
+  public boolean startAnalogCaptureBothChannelsTriggerOnWaveformGenerator(
+      int waveformGenerator, double sampleFrequency, int bufferSize, boolean isScale2Volts) {
 
     if (bufferSize > DWF.AD2_MAX_BUFFER_SIZE) {
-      // logger.error("Buffer size larger than allowed size. Setting to " + DWF.AD2_MAX_BUFFER_SIZE);
+      logger.warn("Buffer size larger than allowed size. Setting to " + DWF.AD2_MAX_BUFFER_SIZE);
       bufferSize = DWF.AD2_MAX_BUFFER_SIZE;
     }
 
     boolean success = true;
     success = success && FDwfAnalogInFrequencySet(sampleFrequency);
     success = success && FDwfAnalogInBufferSizeSet(bufferSize);
-    success = success && FDwfAnalogInTriggerPositionSet((bufferSize / 2) / sampleFrequency); // no buffer prefill
+    success =
+        success
+            && FDwfAnalogInTriggerPositionSet(
+                (bufferSize / 2) / sampleFrequency); // no buffer prefill
 
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_1, true);
-    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, isScale2Volts ? 2 : 6);
+    success =
+        success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_1, isScale2Volts ? 2 : 6);
     success = success && FDwfAnalogInChannelEnableSet(DWF.OSCILLOSCOPE_CHANNEL_2, true);
-    success = success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, isScale2Volts ? 2 : 6);
+    success =
+        success && FDwfAnalogInChannelRangeSet(DWF.OSCILLOSCOPE_CHANNEL_2, isScale2Volts ? 2 : 6);
 
     success = success && FDwfAnalogInAcquisitionModeSet(AcquisitionMode.Single.getId());
 
@@ -348,9 +419,15 @@ public class DWF {
     success = success && FDwfAnalogInTriggerAutoTimeoutSet(0); // disable auto trigger
 
     if (waveformGenerator == DWF.WAVEFORM_CHANNEL_1) {
-      success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcAnalogOut1.getId()); // one of the analog in channels
+      success =
+          success
+              && FDwfAnalogInTriggerSourceSet(
+                  DWF.TriggerSource.trigsrcAnalogOut1.getId()); // one of the analog in channels
     } else if (waveformGenerator == DWF.WAVEFORM_CHANNEL_2) {
-      success = success && FDwfAnalogInTriggerSourceSet(DWF.TriggerSource.trigsrcAnalogOut2.getId()); // one of the analog in channels
+      success =
+          success
+              && FDwfAnalogInTriggerSourceSet(
+                  DWF.TriggerSource.trigsrcAnalogOut2.getId()); // one of the analog in channels
     }
 
     success = success && FDwfAnalogInTriggerTypeSet(AnalogTriggerType.trigtypeEdge.getId());
@@ -404,7 +481,13 @@ public class DWF {
 
   public native boolean FDwfAnalogOutNodeDataSet(int idxChannel, double[] rgdData, int size);
 
-  public boolean startWave(int idxChannel, Waveform waveform, double frequency, double amplitude, double offset, double dutyCycle) {
+  public boolean startWave(
+      int idxChannel,
+      Waveform waveform,
+      double frequency,
+      double amplitude,
+      double offset,
+      double dutyCycle) {
 
     boolean success = true;
     success = success && FDwfAnalogOutNodeEnableSet(idxChannel, true);
@@ -424,8 +507,9 @@ public class DWF {
 
   public boolean stopWave(int idxChannel) {
 
-    FDwfAnalogOutNodeOffsetSet(idxChannel, 0); // shouldn't need this in theory, but DC offset is always lingering
-                                               // (https://forum.digilentinc.com/topic/3465-waveforms-sdk-correctly-start-and-stop-analog-out/)
+    FDwfAnalogOutNodeOffsetSet(
+        idxChannel, 0); // shouldn't need this in theory, but DC offset is always lingering
+    // (https://forum.digilentinc.com/topic/3465-waveforms-sdk-correctly-start-and-stop-analog-out/)
     return FDwfAnalogOutConfigure(idxChannel, false);
   }
 
@@ -435,27 +519,41 @@ public class DWF {
 
   public native boolean FDwfAnalogOutIdleSet(int idxChannel, int idle);
 
-  // public boolean startSinglePulse(int idxChannel, Waveform waveform, double frequency, double amplitude, double offset, double dutyCycle) {
-  //
-  // FDwfAnalogOutRepeatSet(idxChannel, 1);
-  // double secRun = 1 / frequency / 2;
-  // FDwfAnalogOutRunSet(idxChannel, secRun);
-  // FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
-  // return startWave(idxChannel, waveform, frequency, amplitude, offset, dutyCycle);
-  // }
-
-  public boolean startCustomPulseTrain(int idxChannel, double frequency, double offset, int numPulses, double[] rgdData) {
+  /**
+   * The Analog outputs have the following specs: AC amplitude (max): ±5 V, DC Offset (max): ±5 V.
+   * Here, we hardcode the amplitude to 5V allowing for the maximum voltage range possible for the
+   * analog out. The waveform data defined in the `rgdData` parameter must be scaled against this 5
+   * V output range with values between -1 and +1. For example, a rgdData value of 1.0 will result
+   * in an output voltage of 5.0 V, a rgdData value of 0.2 will result in an output voltage of 1.0
+   * V...
+   *
+   * @param idxChannel
+   * @param frequency
+   * @param offset
+   * @param numPulses
+   * @param rgdData - scaled between -1.0 and +1.0 against an anaolg output voltage of +/-5V.
+   * @return
+   */
+  public boolean startCustomPulseTrain(
+      int idxChannel, double frequency, double offset, int numPulses, double[] rgdData) {
 
     boolean success = true;
 
     success = success && FDwfAnalogOutRepeatSet(idxChannel, 1);
     double secRun = 1 / frequency * numPulses;
     success = success && FDwfAnalogOutRunSet(idxChannel, secRun);
-    success = success && FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
+    success =
+        success
+            && FDwfAnalogOutIdleSet(
+                idxChannel,
+                AnalogOutIdle.Offset
+                    .getId()); // when idle, what's the DC level? answer: the offset level
     success = success && FDwfAnalogOutNodeEnableSet(idxChannel, true);
     success = success && FDwfAnalogOutNodeFunctionSet(idxChannel, Waveform.Custom.getId());
     success = success && FDwfAnalogOutNodeFrequencySet(idxChannel, frequency);
-    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 1.0);
+    success =
+        success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0); // manually set to full amplitude
+    //    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 1.0);
     success = success && FDwfAnalogOutNodeOffsetSet(idxChannel, offset);
     success = success && FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
     success = success && FDwfAnalogOutConfigure(idxChannel, true);
@@ -467,17 +565,39 @@ public class DWF {
     return true;
   }
 
-  public boolean setCustomPulseTrain(int idxChannel, double frequency, double offset, int numPulses, double[] rgdData) {
+  /**
+   * The Analog outputs have the following specs: AC amplitude (max): ±5 V, DC Offset (max): ±5 V.
+   * Here, we hardcode the amplitude to 5V allowing for the maximum voltage range possible for the
+   * analog out. The waveform data defined in the `rgdData` parameter must be scaled against this 5
+   * V output range with values between -1 and +1. For example, a rgdData value of 1.0 will result
+   * in an output voltage of 5.0 V, a rgdData value of 0.2 will result in an output voltage of 1.0
+   * V...
+   *
+   * @param idxChannel
+   * @param frequency
+   * @param offset
+   * @param numPulses
+   * @param rgdData - scaled between -1.0 and +1.0 against an anaolg output voltage of +/-5V.
+   * @return
+   */
+  public boolean setCustomPulseTrain(
+      int idxChannel, double frequency, double offset, int numPulses, double[] rgdData) {
 
     boolean success = true;
 
     success = success && FDwfAnalogOutRepeatSet(idxChannel, 1);
     double secRun = 1 / frequency * numPulses;
     success = success && FDwfAnalogOutRunSet(idxChannel, secRun);
-    success = success && FDwfAnalogOutIdleSet(idxChannel, AnalogOutIdle.Offset.getId()); // when idle, what's the DC level? answer: the offset level
+    success =
+        success
+            && FDwfAnalogOutIdleSet(
+                idxChannel,
+                AnalogOutIdle.Offset
+                    .getId()); // when idle, what's the DC level? answer: the offset level
     success = success && FDwfAnalogOutNodeFunctionSet(idxChannel, Waveform.Custom.getId());
     success = success && FDwfAnalogOutNodeFrequencySet(idxChannel, frequency);
-    success = success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 1.0);
+    success =
+        success && FDwfAnalogOutNodeAmplitudeSet(idxChannel, 5.0); // manually set to full amplitude
     success = success && FDwfAnalogOutNodeOffsetSet(idxChannel, offset);
     success = success && FDwfAnalogOutNodeDataSet(idxChannel, rgdData, rgdData.length);
     if (!success) {
