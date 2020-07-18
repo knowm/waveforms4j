@@ -54,11 +54,12 @@ A simple test to see if the JNI library works is to run `AnalogOutSine.java`. If
 
 ## Building the Jar
 
-### general
+#### general
 
-    mvn clean package
-    mvn clean install  
-    mvn javadoc:javadoc  
+    mvn clean package  
+    mvn javadoc:javadoc 
+    mvn com.coveo:fmt-maven-plugin:format 
+    mvn versions:display-dependency-updates 
     
 Since we moved the JNI libs into `src/main/resources` in the above step, they are bundled in the jar.
 
