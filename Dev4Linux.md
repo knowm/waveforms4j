@@ -57,13 +57,13 @@ cd /opt/idea-IC-183.5429.30/bin
 Get .deb files from here: <https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start>
 
 ```  
-sudo mv ~/Downloads/digilent.adept.runtime_2.19.2-amd64.deb /var/cache/apt/archives
+sudo mv ~/Downloads/digilent.adept.runtime_2.20.2-amd64.deb /var/cache/apt/archives
 cd /var/cache/apt/archives
-sudo dpkg -i digilent.adept.runtime_2.19.2-amd64.deb
+sudo dpkg -i digilent.adept.runtime_2.20.2-amd64.deb
 
-sudo mv ~/Downloads/digilent.waveforms_3.9.1_amd64.deb /var/cache/apt/archives
+sudo mv ~/Downloads/digilent.waveforms_3.12.2_amd64.deb /var/cache/apt/archives
 cd /var/cache/apt/archives
-sudo dpkg -i digilent.waveforms_3.9.1_amd64.deb
+sudo dpkg -i digilent.waveforms_3.12.2_amd64.deb
 ```
 
 ## Compile Java Code and Generate Header File
@@ -95,22 +95,10 @@ You need to find where the Java JNI Headers are located first and use it for the
 sudo find / -name "jni.h"
 find / -name jni_md.h 2> /dev/null
 cd ~/Github/waveforms4j/
-gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jvm/jdk-11.0.2/include -I/usr/lib/jvm/jdk-11.0.2/include/linux -L/usr/lib -ldwf
+gcc -Wall -lstdc++ -fPIC -shared -o waveforms4j.so ./c/org_knowm_waveforms4j_DWF.cpp -I/usr/lib/jdk/jdk-11.0.2/include -I/usr/lib/jdk/jdk-11.0.2/include/linux -L/usr/lib -ldwf
 mv ./waveforms4j.so ./src/main/resources
 ```
  
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### C++ Build Tools
 
@@ -121,5 +109,5 @@ sudo apt-get install --reinstall build-essential
 
 ### Push Changes
 
-Use Git Cola or the git tools in Eclipse.
+Use Git Cola or the git tools in Eclipse or IntelliJ.
 
