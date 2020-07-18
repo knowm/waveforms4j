@@ -2,7 +2,7 @@
 
 1. [Java 11 SDK](https://stackoverflow.com/a/52531093/1625820)
 1. [IntelliJ](https://www.jetbrains.com/idea/download/index.html#section=windows)
-1. [Mingw-w64](https://sourceforge.net/projects/mingw-w64/)
+1. [Mingw-w64](https://stackoverflow.com/a/60212467)
 1. [Waveforms](https://reference.digilentinc.com/reference/software/waveforms/waveforms-3/start)
 
 ## Install DWF Framework on Windows 10
@@ -15,12 +15,14 @@ After downloading and installing Waveforms, open it up and make sure it connects
 
 ## Second Sanity Check - Compile and Run SDK Example
 
-Change permissions on `cd C:\Program Files\Digilent\WaveFormsSDK\samples` via the GUI.
-Open up MinGW.
+Unzip Mingw64 and move 'mingw64' to 'C:\' and add 'C:\mingw64\bin' to your PATH environment variable via the Windows Settings GUI. Open up the terminal with 'CMD'.
 
-    cd C:\Program Files\Digilent\WaveFormsSDK\samples\c
+Change permissions on `cd C:\Program Files\Digilent\WaveFormsSDK\samples\c` via the GUI so that the gcc command can write the *.out file in that folder.
+Open up the terminal with 'cmd'.
+
+    cd C:\Program Files (x86)\Digilent\WaveFormsSDK\samples\c
     // gcc digitalout_pins.cpp -o digitalout_pins.out -L"C:\Windows\System32" -ldwf
-    gcc digitalout_pins.cpp -o digitalout_pins.out -L"C:\Program Files\Digilent\WaveFormsSDK\lib\x64" -ldwf
+    gcc digitalout_pins.cpp -o digitalout_pins.out -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64" -ldwf
     digitalout_pins.out
 
 ## Compile Java Code and Generate Header File
@@ -50,12 +52,10 @@ Note: You need to take those methods created in the header file and implement th
 
 You need to find where the Java JNI Headers are located first and use it for the first two `-I` arguments. This is usually somewhere such as: C:\Program Files\Java\jdk1.8.0_112.
 
-You need to install a GCC compiler for Windows such as [Mingw-64](https://sourceforge.net/projects/mingw-w64/).
-
 ```
-cd C:\Users\tim\Documents\GitHub\waveforms4j
-g++ -static -static-libgcc -static-libstdc++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -I"C:\Program Files (x86)\Java\jdk-11.0.2\include" -I"C:\Program Files (x86)\Java\jdk-11.0.2\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64" -ldwf
-    move ./waveforms4j.dll ./src/main/resources
+cd C:\Users\knowm\Documents\GitHub\waveforms4j
+g++ -static -static-libgcc -static-libstdc++ -m64 -Wall -D_JNI_IMPLEMENTATION_ -I"C:\Program Files\Java\jdk-11.0.2\include" -I"C:\Program Files\Java\jdk-11.0.2\include\win32" -shared -o waveforms4j.dll ./c/org_knowm_waveforms4j_DWF.cpp -L"C:\Program Files (x86)\Digilent\WaveFormsSDK\lib\x64" -ldwf
+move ./waveforms4j.dll ./src/main/resources
 ```
 Note: the key to solving the UnsatifiedLinkError was here: <http://stackoverflow.com/questions/18138635/mingw-exe-requires-a-few-gcc-dlls-regardless-of-the-code>.
 
