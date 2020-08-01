@@ -79,7 +79,7 @@ Or if you use Maven, add the following to your pom file:
 <dependency>
     <groupId>org.knowm</groupId>
     <artifactId>waveforms4j</artifactId>
-    <version>0.0.10</version>
+    <version>0.0.11</version>
 </dependency>
 ```
 
